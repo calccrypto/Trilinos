@@ -46,8 +46,10 @@ public:
     const typename StepperTrapezoidalAppAction<Scalar>::ACTION_LOCATION actLoc)
   {
     switch(actLoc) {
-      case StepperTrapezoidalAppAction<Scalar>::BEGIN_STEP:
-      case StepperTrapezoidalAppAction<Scalar>::END_STEP:
+      case StepperBackwardEulerAppAction<Scalar>::BEGIN_STEP:
+      case StepperBackwardEulerAppAction<Scalar>::BEFORE_SOLVE:
+      case StepperBackwardEulerAppAction<Scalar>::AFTER_SOLVE:
+      case StepperBackwardEulerAppAction<Scalar>::END_STEP:
       {
         // No-op.
         break;

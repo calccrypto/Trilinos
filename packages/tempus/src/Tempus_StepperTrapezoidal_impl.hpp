@@ -11,6 +11,7 @@
 
 #include "Tempus_config.hpp"
 #include "Tempus_StepperFactory.hpp"
+#include "Tempus_StepperTrapezoidalModifierDefault.hpp"
 #include "Tempus_WrapperModelEvaluatorBasic.hpp"
 #include "Teuchos_VerboseObjectParameterListHelpers.hpp"
 #include "NOX_Thyra.H"
@@ -71,7 +72,6 @@ template<class Scalar>
 StepperTrapezoidal<Scalar>::StepperTrapezoidal(
   const Teuchos::RCP<const Thyra::ModelEvaluator<Scalar> >& appModel,
   const Teuchos::RCP<Thyra::NonlinearSolverBase<Scalar> >& solver,
-  const Teuchos::RCP<Stepper<Scalar> >& predictorStepper,
   bool useFSAL,
   std::string ICConsistency,
   bool ICConsistencyCheck,
@@ -89,7 +89,6 @@ StepperTrapezoidal<Scalar>::StepperTrapezoidal(
 #endif
   this->setAppAction(stepperTrapAppAction);
   this->setSolver(solver);
-  this->setPredictor(predictorStepper);
 
   if (appModel != Teuchos::null) {
     this->setModel(appModel);
@@ -186,7 +185,7 @@ void StepperTrapezoidal<Scalar>::takeStep(
       "  or \"Storage Type\" = \"Static\" and \"Storage Limit\" = \"2\"\n");
 #ifndef TEMPUS_HIDE_DEPRECATED_CODE
     this->stepperObserver_->observeBeginTakeStep(solutionHistory, *this);
-endif
+#endif
     RCP<StepperTrapezoidal<Scalar> > thisStepper = Teuchos::rcpFromRef(*this);
     stepperTrapAppAction_->execute(solutionHistory, thisStepper,
       StepperTrapezoidalAppAction<Scalar>::ACTION_LOCATION::BEGIN_STEP);
@@ -216,7 +215,6 @@ endif
 #ifndef TEMPUS_HIDE_DEPRECATED_CODE
     stepperTrapObserver_->observeBeforeSolve(solutionHistory, *this);
 #endif
-    RCP<StepperTrapezoidal<Scalar> > thisStepper = Teuchos::rcpFromRef(*this);
     stepperTrapAppAction_->execute(solutionHistory, thisStepper,
       StepperTrapezoidalAppAction<Scalar>::ACTION_LOCATION::BEFORE_SOLVE);
 
@@ -225,7 +223,6 @@ endif
 #ifndef TEMPUS_HIDE_DEPRECATED_CODE
     stepperTrapObserver_->observeAfterSolve(solutionHistory, *this);
 #endif
-    RCP<StepperTrapezoidal<Scalar> > thisStepper = Teuchos::rcpFromRef(*this);
     stepperTrapAppAction_->execute(solutionHistory, thisStepper,
       StepperTrapezoidalAppAction<Scalar>::ACTION_LOCATION::AFTER_SOLVE);
 
@@ -238,7 +235,6 @@ endif
 #ifndef TEMPUS_HIDE_DEPRECATED_CODE
     this->stepperObserver_->observeEndTakeStep(solutionHistory, *this);
 #endif
-    RCP<StepperTrapezoidal<Scalar> > thisStepper = Teuchos::rcpFromRef(*this);
     stepperTrapAppAction_->execute(solutionHistory, thisStepper,
       StepperTrapezoidalAppAction<Scalar>::ACTION_LOCATION::END_STEP);
   }

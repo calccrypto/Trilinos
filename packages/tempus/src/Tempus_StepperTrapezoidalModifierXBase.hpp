@@ -31,9 +31,9 @@ namespace Tempus {
  *  Below is the Trapezoidal algorithm with the locations of the ModifierX calls
  *  italicized.
  *
- *  To do
+ * TO DO ADD ALGO
+ *
  */
-
 template<class Scalar>
 class StepperTrapezoidalModifierXBase
   : virtual public Tempus::StepperTrapezoidalAppAction<Scalar>
@@ -67,25 +67,25 @@ private:
     RCP<Thyra::VectorBase<Scalar> > x;
 
     switch(actLoc) {
-    case StepperBackwardEulerAppAction<Scalar>::BEGIN_STEP:
+      case StepperTrapezoidalAppAction<Scalar>::BEGIN_STEP:
       {
         modType = X_BEGIN_STEP;
         x = workingState->getX();
         break;
       }
-    case StepperBackwardEulerAppAction<Scalar>::BEFORE_SOLVE:
+      case StepperTrapezoidalAppAction<Scalar>::BEFORE_SOLVE:
       {
         modType = X_BEFORE_SOLVE;
         x = workingState->getX();
         break;
       }
-    case StepperBackwardEulerAppAction<Scalar>::AFTER_SOLVE:
+      case StepperTrapezoidalAppAction<Scalar>::AFTER_SOLVE:
       {
         modType = X_AFTER_SOLVE;
         x = workingState->getX();
         break;
       }
-    case StepperBackwardEulerAppAction<Scalar>::END_STEP:
+      case StepperTrapezoidalAppAction<Scalar>::END_STEP:
       {
         modType = XDOT_END_STEP;
         if (workingState->getXDot() != Teuchos::null)
@@ -94,16 +94,21 @@ private:
           x = stepper->getStepperXDot();
         break;
       }
-    default:
-      TEUCHOS_TEST_FOR_EXCEPTION(true, std::logic_error,
-      "Error - unknown action location.\n");
+      default:
+        TEUCHOS_TEST_FOR_EXCEPTION(true, std::logic_error,
+        "Error - unknown action location.\n");
     }
+
+    this->modify(x, time, dt, modType);
+  }
 
 public:
 
   /// Indicates the location of application action (see algorithm).
   enum MODIFIER_TYPE {
     X_BEGIN_STEP,     ///< Modify \f$x\f$ at the beginning of the step.
+    X_BEFORE_SOLVE,   ///< Modify \f$x\f$ before the implicit solve.
+    X_AFTER_SOLVE,    ///< Modify \f$x\f$ after the implicit solve.
     XDOT_END_STEP     ///< Modify \f$\dot{x}\f$ at the end of the step.
   };
 

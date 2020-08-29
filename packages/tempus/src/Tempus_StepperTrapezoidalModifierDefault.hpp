@@ -14,7 +14,7 @@
 
 // Applications can uncomment this include in their implementation,
 // if they need access to the stepper methods.
-//#include "Tempus_StepperSubcycling.hpp"
+//#include "Tempus_StepperTrapezoidal.hpp"
 
 
 namespace Tempus {
@@ -22,7 +22,7 @@ namespace Tempus {
 /** \brief Default modifier for StepperTrapezoidal.
  *
  *  The default modifier provides no-op functionality for the modifier.
- *  See StepperSubcyclingModifierBase for details on the algorithm.
+ *  See StepperTrapezoidalModifierBase for details on the algorithm.
  *
  *  Applications can copy this implementation, rename, implement their
  *  action, and set on the stepper to get app-specific functionality.
@@ -39,7 +39,7 @@ public:
   /// Destructor
   virtual ~StepperTrapezoidalModifierDefault(){}
 
-  /// Modify Subcycling Stepper.
+  /// Modify Trapezoidal Stepper.
   virtual void modify(
     Teuchos::RCP<SolutionHistory<Scalar> > /* sh */,
     Teuchos::RCP<StepperTrapezoidal<Scalar> > /* stepper */,
@@ -47,6 +47,8 @@ public:
   {
     switch(actLoc) {
       case StepperTrapezoidalAppAction<Scalar>::BEGIN_STEP:
+      case StepperTrapezoidalAppAction<Scalar>::BEFORE_SOLVE:
+      case StepperTrapezoidalAppAction<Scalar>::AFTER_SOLVE:
       case StepperTrapezoidalAppAction<Scalar>::END_STEP:
       {
         // No-op.

@@ -43,6 +43,8 @@ public:
   {
     switch(modType) {
       case StepperTrapezoidalModifierXBase<Scalar>::X_BEGIN_STEP:
+      case StepperTrapezoidalModifierXBase<Scalar>::X_BEFORE_SOLVE:
+      case StepperTrapezoidalModifierXBase<Scalar>::X_AFTER_SOLVE:
       case StepperTrapezoidalModifierXBase<Scalar>::XDOT_END_STEP:
       {
         // No-op.
