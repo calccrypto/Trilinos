@@ -131,7 +131,7 @@ IossBlockMembership get_block_memberships(stk::io::StkMeshIoBroker& stkIo)
 
 void fill_block_parts_given_names(const std::vector<std::string>& side_block_names,
                                               stk::mesh::MetaData& meta,
-                                              std::vector<const stk::mesh::Part*>& blocks)
+                                              stk::mesh::ConstPartVector& blocks)
 {
     for(const std::string& partName : side_block_names)
     {
@@ -208,8 +208,8 @@ bool is_face_represented_in_sideset(const stk::mesh::BulkData& bulk, const stk::
     stk::mesh::EntityRank sideRank = bulk.mesh_meta_data().side_rank();
     ThrowRequire(bulk.entity_rank(face) == sideRank);
 
-    std::vector<stk::mesh::Entity> side_elements;
-    std::vector<stk::mesh::Entity> side_nodes(bulk.begin_nodes(face), bulk.end_nodes(face));
+    stk::mesh::EntityVector side_elements;
+    stk::mesh::EntityVector side_nodes(bulk.begin_nodes(face), bulk.end_nodes(face));
 
     stk::mesh::get_entities_through_relations(bulk, side_nodes, stk::topology::ELEMENT_RANK, side_elements);
 
@@ -292,7 +292,7 @@ bool should_reconstruct_sideset(const stk::mesh::BulkData& bulkData, const stk::
 void reconstruct_sideset(stk::mesh::BulkData& bulkData, const stk::mesh::Part& surfacePart)
 {
     bulkData.clear_sideset(surfacePart);
-    std::vector<const stk::mesh::Part *> touching_parts = bulkData.mesh_meta_data().get_blocks_touching_surface(&surfacePart);
+    stk::mesh::ConstPartVector touching_parts = bulkData.mesh_meta_data().get_blocks_touching_surface(&surfacePart);
 
     stk::mesh::Selector elementSelector = stk::mesh::selectUnion(touching_parts);
     fill_sideset(surfacePart, bulkData, elementSelector);
@@ -302,7 +302,7 @@ void create_bulkdata_sidesets(stk::mesh::BulkData& bulkData)
 {
     if(bulkData.was_mesh_modified_since_sideset_creation())
     {
-        std::vector<const stk::mesh::Part *> surfacesInMap = bulkData.mesh_meta_data().get_surfaces_in_surface_to_block_map();
+        stk::mesh::ConstPartVector surfacesInMap = bulkData.mesh_meta_data().get_surfaces_in_surface_to_block_map();
 
         bool reconstructSideset = false;
         for(size_t i=0;i<surfacesInMap.size();++i)
@@ -321,12 +321,12 @@ void create_bulkdata_sidesets(stk::mesh::BulkData& bulkData)
     }
 }
 
-std::vector<const stk::mesh::Part*> get_sideset_io_parts(const stk::mesh::BulkData& bulkData, stk::mesh::Entity face)
+stk::mesh::ConstPartVector get_sideset_io_parts(const stk::mesh::BulkData& bulkData, stk::mesh::Entity face)
 {
     ThrowRequire(bulkData.entity_rank(face) == bulkData.mesh_meta_data().side_rank());
     const stk::mesh::PartVector& parts = bulkData.bucket(face).supersets();
 
-    std::vector<const stk::mesh::Part *> sidesetParts;
+    stk::mesh::ConstPartVector sidesetParts;
 
     for(const stk::mesh::Part *part : parts)
     {
@@ -818,7 +818,7 @@ std::pair<bool,bool> is_positive_sideset_face_polarity(const stk::mesh::BulkData
 {
     std::pair<bool,bool> returnValue(false,false);
 
-    std::vector<const stk::mesh::Part*> sidesetParts = stk::io::get_sideset_io_parts(bulk, face);
+    stk::mesh::ConstPartVector sidesetParts = stk::io::get_sideset_io_parts(bulk, face);
 
     if(sidesetParts.size() == 0) {
         return returnValue;
@@ -896,4 +896,3 @@ std::string construct_filename_for_serial_or_parallel(const std::string &baseFil
 }
 
 }}
-

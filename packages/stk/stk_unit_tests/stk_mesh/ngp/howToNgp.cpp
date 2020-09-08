@@ -1175,8 +1175,8 @@ TEST_F(NgpHowTo, checkPartMembership)
   stk::mesh::Entity node2 = get_bulk().get_entity(stk::topology::NODE_RANK, 2u);
 
   get_bulk().modification_begin();
-  get_bulk().change_entity_parts(node1, stk::mesh::PartVector{&testPart}, {});
-  get_bulk().change_entity_parts(node2, stk::mesh::PartVector{&testPart}, {});
+  get_bulk().change_entity_parts(node1, stk::mesh::PartVector{&testPart}, stk::mesh::PartVector{});
+  get_bulk().change_entity_parts(node2, stk::mesh::PartVector{&testPart}, stk::mesh::PartVector{});
   get_bulk().modification_end();
 
   run_part_membership_test(get_bulk(), testPart.mesh_meta_data_ordinal());

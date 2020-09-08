@@ -131,12 +131,12 @@ void fill_sharing_data(stk::mesh::BulkData& bulkData, stk::mesh::ElemElemGraph &
     }
 }
 
-template <typename T>
-void pack_vector(CommBuffer &buffer, const std::vector<T> &vec)
+template <typename Vector_T>
+void pack_vector(CommBuffer &buffer, const Vector_T &vec)
 {
     buffer.pack<size_t>(vec.size());
-    for(const T& entry : vec)
-        buffer.pack<T>(entry);
+    for(const typename Vector_T::value_type& entry : vec)
+        buffer.pack<typename Vector_T::value_type>(entry);
 }
 
 void pack_data(stk::CommSparse& comm, const std::vector<SideSharingData>& sideSharingDataThisProc, const std::vector<stk::mesh::impl::IdViaSidePair>& idAndSides)
@@ -146,9 +146,9 @@ void pack_data(stk::CommSparse& comm, const std::vector<SideSharingData>& sideSh
         int other_proc = sideSharingDataThisProc[i].sharingProc;
         CommBuffer &buffer = comm.send_buffer(other_proc);
 
-        buffer.pack<stk::mesh::EntityId>(idAndSides[i].id);
-        buffer.pack<int>(idAndSides[i].side);
-        buffer.pack<stk::mesh::EntityId>(sideSharingDataThisProc[i].chosenSideId);
+        buffer.pack(idAndSides[i].id);
+        buffer.pack(idAndSides[i].side);
+        buffer.pack(sideSharingDataThisProc[i].chosenSideId);
         pack_vector(buffer, sideSharingDataThisProc[i].allSharingProcs);
         pack_vector(buffer, sideSharingDataThisProc[i].partOrdinals);
     }
@@ -162,14 +162,14 @@ void allocate_and_send(stk::CommSparse& comm, const std::vector<SideSharingData>
     comm.communicate();
 }
 
-template <typename T>
-void unpack_vector(CommBuffer &buffer, std::vector<T> &vec)
+template <typename Vector_T>
+void unpack_vector(CommBuffer &buffer, Vector_T &vec)
 {
     size_t size;
     buffer.unpack<size_t>(size);
     vec.resize(size);
     for(unsigned j=0; j<size; ++j) {
-        buffer.unpack<T>(vec[j]);
+        buffer.unpack<typename Vector_T::value_type>(vec[j]);
     }
 }
 

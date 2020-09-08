@@ -45,7 +45,7 @@ namespace {
 
 void check_connectivities_for_stkMeshHowTo_generateNewEntities(stk::mesh::BulkData &mesh,
     stk::mesh::Entity tet_elem, stk::mesh::Entity hex_elem,
-    const std::vector<stk::mesh::Entity> &generated_entities)
+    const stk::mesh::EntityVector &generated_entities)
 {
   // Check that entities are connected as expected.
   unsigned node_i = 0;
@@ -76,9 +76,9 @@ TEST(stkMeshHowTo, generateNewEntities)
   metaData.commit();
 
   // Parts vectors handy for setting topology later.
-  std::vector<stk::mesh::Part *> add_tetPart(1);
+  stk::mesh::PartVector add_tetPart(1);
   add_tetPart[0] = &tetPart;
-  std::vector<stk::mesh::Part *> add_hexPart(1);
+  stk::mesh::PartVector add_hexPart(1);
   add_hexPart[0] = &hexPart;
 
   stk::mesh::BulkData mesh(metaData, MPI_COMM_WORLD);
@@ -89,7 +89,7 @@ TEST(stkMeshHowTo, generateNewEntities)
   const size_t num_elems_requested =  2;
   requests[stk::topology::NODE_RANK] = num_nodes_requested;
   requests[stk::topology::ELEMENT_RANK] = num_elems_requested;
-  std::vector<stk::mesh::Entity> requested_entities;
+  stk::mesh::EntityVector requested_entities;
 
   mesh.generate_new_entities(requests, requested_entities);
 
@@ -115,7 +115,7 @@ TEST(stkMeshHowTo, generateNewEntities)
 
   // Not setting topologies of new entities with rank > stk::topology::NODE_RANK causes throw
   mesh.modification_begin();
-  std::vector<stk::mesh::Entity> more_requested_entities;
+  stk::mesh::EntityVector more_requested_entities;
   mesh.generate_new_entities(requests, more_requested_entities);
 #ifdef NDEBUG
   mesh.modification_end();

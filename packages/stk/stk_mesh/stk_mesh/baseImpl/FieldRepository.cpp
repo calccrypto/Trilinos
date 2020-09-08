@@ -120,7 +120,7 @@ FieldBase * FieldRepository::get_field(
   const shards::ArrayDimTag * const * arg_dim_tags ,
   unsigned                            arg_num_states ) const
 {
-  for ( std::vector<FieldBase*>::const_iterator
+  for ( FieldVector::const_iterator
         j =  m_rankedFields[arg_entity_rank].begin();
         j != m_rankedFields[arg_entity_rank].end(); ++j ) {
     if ( equal_case( (*j)->name() , arg_name ) ) {

@@ -105,14 +105,14 @@ void copy_fields(const stk::mesh::MetaData &oldMeta, stk::mesh::MetaData &newMet
 
 void copy_surface_to_block_mapping(const stk::mesh::MetaData &oldMeta, stk::mesh::MetaData &newMeta)
 {
-    std::vector<const stk::mesh::Part *> oldSurfacesInMap = oldMeta.get_surfaces_in_surface_to_block_map();
+    stk::mesh::ConstPartVector oldSurfacesInMap = oldMeta.get_surfaces_in_surface_to_block_map();
     for(size_t i=0;i<oldSurfacesInMap.size();++i)
     {
         stk::mesh::Part* surfaceNew = get_corresponding_part(newMeta, oldSurfacesInMap[i]);
         ThrowRequireWithSierraHelpMsg(surfaceNew != nullptr);
 
-        std::vector<const stk::mesh::Part*> oldBlocks = oldMeta.get_blocks_touching_surface(oldSurfacesInMap[i]);
-        std::vector<const stk::mesh::Part*> newBlocks(oldBlocks.size());
+        stk::mesh::ConstPartVector oldBlocks = oldMeta.get_blocks_touching_surface(oldSurfacesInMap[i]);
+        stk::mesh::ConstPartVector newBlocks(oldBlocks.size());
         for(size_t ii=0;ii<oldBlocks.size();++ii)
         {
             stk::mesh::Part* newBlock = get_corresponding_part(newMeta, oldBlocks[ii]);

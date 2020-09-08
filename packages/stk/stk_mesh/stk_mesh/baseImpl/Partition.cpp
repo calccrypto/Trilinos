@@ -231,7 +231,7 @@ void Partition::sort(const EntitySorterBase& sorter)
   //index of bucket in partition
   partition_key[ partition_key[0] ] = 0;
 
-  std::vector<Entity> entities(m_size);
+  EntityVector entities(m_size);
 
   BucketVector::iterator buckets_begin, buckets_end;
   buckets_begin = begin();
@@ -270,7 +270,7 @@ void Partition::sort(const EntitySorterBase& sorter)
   // Now that we have the entities sorted, we need to put them and their data
   // in the right order in the buckets.
 
-  std::vector<Entity>::iterator sorted_ent_vector_itr = entities.begin();
+  EntityVector::iterator sorted_ent_vector_itr = entities.begin();
 
   Bucket* orig_vacancy_bucket = vacancy_bucket;
 

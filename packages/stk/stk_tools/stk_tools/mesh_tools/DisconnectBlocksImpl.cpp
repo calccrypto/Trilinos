@@ -147,7 +147,7 @@ void add_nodes_to_disconnect(const stk::mesh::BulkData & bulk,
                              LinkInfo& info)
 {
   const stk::mesh::MetaData & meta = bulk.mesh_meta_data();
-  std::vector<stk::mesh::Entity> sideNodes;
+  stk::mesh::EntityVector sideNodes;
 
   const stk::mesh::Part & firstBlock  = *blockPair.first;
   const stk::mesh::Part & secondBlock = *blockPair.second;
@@ -575,7 +575,7 @@ void traverse_transitive_relations(stk::mesh::BulkData& bulk, const BlockPairVec
   BlockPairVector blockPairs;
   stk::mesh::PartLess partLess;
   const stk::mesh::PartVector& oldBlockMembership = nodeMapEntryIt->second.oldBlockMembership;
-  std::vector<stk::mesh::Part*> transitiveTriplet(3);
+  stk::mesh::PartVector transitiveTriplet(3);
 
   for(const BlockPair& blockPair : blockPairsToReconnect) {
     bool foundFirst = std::binary_search(oldBlockMembership.begin(), oldBlockMembership.end(), blockPair.first, partLess);

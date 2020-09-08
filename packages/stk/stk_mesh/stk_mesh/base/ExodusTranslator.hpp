@@ -167,7 +167,7 @@ public:
         const stk::mesh::Part *part = get_exodus_part_of_rank(setId, mBulkData.mesh_meta_data().side_rank());
         stk::mesh::Selector localAndShared = mBulkData.mesh_meta_data().locally_owned_part() | mBulkData.mesh_meta_data().globally_shared_part();
 
-        std::vector<stk::mesh::Entity> entities;
+        EntityVector entities;
         stk::mesh::get_selected_entities(*part & localAndShared, mBulkData.buckets(mBulkData.mesh_meta_data().side_rank()), entities);
 
         size_t numDF=0;

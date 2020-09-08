@@ -83,7 +83,7 @@ void SelectorFixture::generate_mesh()
   stk::mesh::EntityId ent_id =
     1 + entity_count * m_bulk_data.parallel_rank(); // Unique ID
 
-  std::vector<stk::mesh::Part*> partMembership;
+  stk::mesh::PartVector partMembership;
 
   // Entity1 is contained in PartA
   partMembership.clear();
@@ -148,7 +148,7 @@ VariableSelectorFixture::VariableSelectorFixture(int NumParts)
     1 + NumParts * m_BulkData.parallel_rank(); // Unique ID
 
   for (int part_i = 0 ; part_i < NumParts ; ++part_i) {
-    std::vector<stk::mesh::Part*> partMembership;
+    stk::mesh::PartVector partMembership;
     partMembership.push_back(m_declared_part_vector[part_i]);
     stk::mesh::Entity e = m_BulkData.declare_node(ent_id, partMembership);
     m_entities.push_back( e );

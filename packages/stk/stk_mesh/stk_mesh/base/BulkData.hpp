@@ -416,12 +416,12 @@ public:
   template<typename PARTVECTOR>
   void change_entity_parts( Entity entity, // Mod Mark
       const PARTVECTOR & add_parts ,
-      const PARTVECTOR & remove_parts = PARTVECTOR());
+      const PARTVECTOR & remove_parts = PARTVECTOR{});
 
   template<typename PARTVECTOR>
   void change_entity_parts( const EntityVector& entities,
       const PARTVECTOR & add_parts ,
-      const PARTVECTOR & remove_parts = PARTVECTOR());
+      const PARTVECTOR & remove_parts = PARTVECTOR{});
 
   /** \brief Change part-membership of the specified entities by adding
    * and/or removing parts for each entity.
@@ -495,7 +495,7 @@ public:
    *  of rank 2
    */
   virtual void generate_new_entities(const std::vector<size_t>& requests, // Mod Mark
-      std::vector<Entity>& requested_entities);
+      EntityVector& requested_entities);
 
   Permutation find_permutation( const stk::topology &hr_entity_topo,
                                 Entity const *higher_rank_entity_nodes,
@@ -910,7 +910,7 @@ protected: //functions
 
   bool inputs_ok_and_need_ghosting(Ghosting & ghosts ,
                                const std::vector<EntityProc> & add_send ,
-                               const std::vector<Entity> & remove_receive,
+                               const EntityVector & remove_receive,
                                std::vector<EntityProc> &filtered_add_send);
 
   void internal_batch_add_to_ghosting(Ghosting &ghosting, const EntityProcVec &entitiesAndDestinationProcs); // Mod Mark
@@ -980,7 +980,7 @@ protected: //functions
   void markEntitiesForResolvingSharingInfoUsingNodes(stk::mesh::EntityRank entityRank, bool onlyConsiderSoloSides, std::vector<shared_entity_type>& shared_entities);
   virtual void sortNodesIfNeeded(std::vector<stk::mesh::EntityKey>& nodes);
 
-  void gather_shared_nodes(std::vector<Entity> & shared_nodes);
+  void gather_shared_nodes(EntityVector & shared_nodes);
 
   inline void set_state(Entity entity, EntityState entity_state);
   inline void set_entity_key(Entity entity, EntityKey key);
@@ -1026,7 +1026,7 @@ protected: //functions
 
   void internal_change_ghosting( Ghosting & ghosts,
                                  const std::vector<EntityProc> & add_send ,
-                                 const std::vector<Entity> & remove_receive,
+                                 const EntityVector & remove_receive,
                                  bool is_full_regen = false); // Mod Mark
 
   void internal_change_ghosting( Ghosting & ghosts,
@@ -1083,20 +1083,20 @@ protected: //functions
   void internal_resolve_parallel_create_nodes();
   void internal_resolve_parallel_create_edges_and_faces();
 
-  void internal_update_sharing_comm_map_and_fill_list_modified_shared_entities_of_rank(stk::mesh::EntityRank entityRank, std::vector<stk::mesh::Entity> & shared_new ); // Mod Mark
+  void internal_update_sharing_comm_map_and_fill_list_modified_shared_entities_of_rank(stk::mesh::EntityRank entityRank, stk::mesh::EntityVector & shared_new ); // Mod Mark
   void internal_send_part_memberships_from_owner(const std::vector<EntityProc> &send_list);
 
-  virtual void internal_update_sharing_comm_map_and_fill_list_modified_shared_entities(std::vector<stk::mesh::Entity> & shared_new );
-  void extract_entity_from_shared_entity_type(const std::vector<shared_entity_type>& shared_entities, std::vector<Entity>& shared_new);
-  virtual void fill_shared_entities_of_rank_while_updating_sharing_info(stk::mesh::EntityRank rank, std::vector<Entity> &shared_new);
+  virtual void internal_update_sharing_comm_map_and_fill_list_modified_shared_entities(stk::mesh::EntityVector & shared_new );
+  void extract_entity_from_shared_entity_type(const std::vector<shared_entity_type>& shared_entities, EntityVector& shared_new);
+  virtual void fill_shared_entities_of_rank_while_updating_sharing_info(stk::mesh::EntityRank rank, EntityVector &shared_new);
   virtual void internal_update_sharing_comm_map_and_fill_list_modified_shared_entities_of_node_rank(stk::mesh::EntityVector& shared_new);
 
   virtual void internal_resolve_send_ghost_membership();
   virtual bool should_sort_buckets_by_first_entity_identifier() const { return false; }
-  void resolve_ownership_of_modified_entities(const std::vector<stk::mesh::Entity> &shared_new); // Mod Mark
-  void move_entities_to_proper_part_ownership( const std::vector<stk::mesh::Entity> &shared_modified ); // Mod Mark
+  void resolve_ownership_of_modified_entities(const stk::mesh::EntityVector &shared_new); // Mod Mark
+  void move_entities_to_proper_part_ownership( const stk::mesh::EntityVector &shared_modified ); // Mod Mark
 
-  void add_comm_list_entries_for_entities(const std::vector<stk::mesh::Entity>& shared_modified);
+  void add_comm_list_entries_for_entities(const stk::mesh::EntityVector& shared_modified);
 
   std::pair<EntityComm*,bool> entity_comm_map_insert(Entity entity, const EntityCommInfo &val)
   {
@@ -1171,15 +1171,15 @@ protected: //functions
   void erase_sharing_info_using_key(stk::mesh::EntityKey key, stk::mesh::BulkData::GhostingId ghostingId);
   void add_sharing_info(stk::mesh::Entity entity, stk::mesh::BulkData::GhostingId ghostingId, int sharingProc);
   void update_sharing_after_change_entity_owner(); // Mod Mark
-  void get_entities_that_have_sharing(std::vector<stk::mesh::Entity> &entitiesThatHaveSharingInfo,
+  void get_entities_that_have_sharing(stk::mesh::EntityVector &entitiesThatHaveSharingInfo,
           stk::mesh::EntityToDependentProcessorsMap &entityKeySharing);
   void get_locally_modified_shared_entities(stk::mesh::EntityToDependentProcessorsMap &entityKeySharing, std::vector<std::pair<stk::mesh::EntityKey, int> >& sharedEntities);
   void fill_modified_entities_and_add_sharing_comm_map_info_for_shared_entities(const std::vector<std::pair<stk::mesh::EntityKey, int> > &sharedEntities,
-          const std::vector<stk::mesh::Entity>& entitiesThatUsedToHaveSharingInfoBeforeCEO, std::vector<stk::mesh::Entity>& modifiedEntitiesForWhichCommMapsNeedUpdating);
+          const stk::mesh::EntityVector& entitiesThatUsedToHaveSharingInfoBeforeCEO, stk::mesh::EntityVector& modifiedEntitiesForWhichCommMapsNeedUpdating);
   void erase_all_sharing_for_invalid_entities_on_comm_map();
   void fill_entities_that_have_lost_sharing_info(const std::vector<std::pair<stk::mesh::EntityKey, int> > &sharedEntities,
-          const std::vector<stk::mesh::Entity>& entitiesThatUsedToHaveSharingInfoBeforeCEO, std::vector<stk::mesh::Entity>& modifiedEntitiesForWhichCommMapsNeedUpdating);
-  void resolve_entity_ownership_and_part_membership_and_comm_list(std::vector<stk::mesh::Entity>& modifiedEntities); // Mod Mark
+          const stk::mesh::EntityVector& entitiesThatUsedToHaveSharingInfoBeforeCEO, stk::mesh::EntityVector& modifiedEntitiesForWhichCommMapsNeedUpdating);
+  void resolve_entity_ownership_and_part_membership_and_comm_list(stk::mesh::EntityVector& modifiedEntities); // Mod Mark
 
   //reserves space for a new entity, or reclaims space from a previously-deleted entity
   virtual Entity generate_new_entity(unsigned preferred_offset = 0);
@@ -1253,8 +1253,8 @@ protected: //functions
   void set_modification_summary_proc_id(int proc_id) { m_modSummary.set_proc_id(proc_id); }
   virtual void notify_finished_mod_end();
 
-  void use_elem_elem_graph_to_determine_shared_entities(std::vector<stk::mesh::Entity>& shared_entities);
-  void use_nodes_to_resolve_sharing(stk::mesh::EntityRank rank, std::vector<Entity>& shared_new, bool onlyConsiderSoloSides = false);
+  void use_elem_elem_graph_to_determine_shared_entities(stk::mesh::EntityVector& shared_entities);
+  void use_nodes_to_resolve_sharing(stk::mesh::EntityRank rank, stk::mesh::EntityVector& shared_new, bool onlyConsiderSoloSides = false);
   void change_connectivity_for_edge_or_face(stk::mesh::Entity side, const std::vector<stk::mesh::EntityKey>& node_keys);
   void update_side_elem_permutations(Entity side);
   void resolve_parallel_side_connections(std::vector<SideSharingData>& sideSharingDataToSend,
@@ -1272,20 +1272,20 @@ private:
   void delete_buckets(const stk::mesh::BucketVector & buckets);
   void mark_entities_as_deleted(stk::mesh::Bucket * bucket);
 
-  void generate_ghosting_receive_list(const stk::mesh::Ghosting &ghosting, const std::vector <Entity> &remove_receive,
-    std::vector<Entity> &recvGhosts, std::vector<bool>& ghostStatus);
+  void generate_ghosting_receive_list(const stk::mesh::Ghosting &ghosting, const stk::mesh::EntityVector &remove_receive,
+    stk::mesh::EntityVector &recvGhosts, std::vector<bool>& ghostStatus);
 
   void verify_and_filter_add_send(Ghosting & ghosts, const std::vector<EntityProc> & add_send, bool &need_to_change_ghosting,
                                   bool &add_send_is_owned, std::vector <EntityProc> &filtered_add_send );
 
-  void verify_remove_receive(Ghosting & ghosts, const std::vector<Entity> & remove_receive, bool &need_to_change_ghosting, bool &remove_receive_are_part_of_this_ghosting);
+  void verify_remove_receive(Ghosting & ghosts, const EntityVector & remove_receive, bool &need_to_change_ghosting, bool &remove_receive_are_part_of_this_ghosting);
 
   bool check_errors_and_determine_if_ghosting_needed_in_parallel(const stk::mesh::Ghosting &ghosts,
                                         bool add_send_is_owned,
                                         bool remove_receive_are_part_of_this_ghosting,
                                         bool need_to_change_ghosting,
                                         const std::vector<EntityProc> & add_send,
-                                        const std::vector<Entity> & remove_receive);
+                                        const EntityVector & remove_receive);
 
   void delete_unneeded_entries_from_the_comm_list();
 
@@ -1374,7 +1374,7 @@ private:
   //
   void copy_entity_fields_callback(EntityRank dst_rank, unsigned dst_bucket_id, Bucket::size_type dst_bucket_ord,
                                    unsigned src_bucket_id, Bucket::size_type src_bucket_ord,
-                                   const std::vector<FieldBase*>* fields =NULL);
+                                   const FieldVector* fields =NULL);
 
 
   void destroy_bucket_callback(EntityRank rank, Bucket const& dying_bucket, unsigned capacity);
@@ -1519,7 +1519,7 @@ private:
 
   void determineEntitiesThatNeedGhosting(stk::mesh::BulkData &stkMeshBulkData,
                                          stk::mesh::Entity edge,
-                                         std::vector<stk::mesh::Entity>& entitiesConnectedToNodes,
+                                         stk::mesh::EntityVector& entitiesConnectedToNodes,
                                          const stk::mesh::Entity* nodes,
                                          std::set<EntityProc, EntityLess> &addGhostedEntities);
 
@@ -1634,4 +1634,3 @@ void sync_to_host_and_mark_modified(MetaData& meta);
 #include "BulkDataInlinedMethods.hpp"
 
 #endif //  stk_mesh_BulkData_hpp
-

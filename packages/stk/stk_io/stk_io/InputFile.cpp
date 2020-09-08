@@ -346,7 +346,7 @@ namespace stk {
                       << "' has no transient data.");
 
       const stk::mesh::FieldBase *f = mf.field();
-      std::vector<const stk::mesh::Part*>::iterator P = mf.m_subsetParts.begin();
+      stk::mesh::ConstPartVector::iterator P = mf.m_subsetParts.begin();
       while (P != mf.m_subsetParts.end()) {
         // Find the Ioss::GroupingEntity corresponding to this part...
         mf.set_inactive();
@@ -620,7 +620,7 @@ namespace stk {
             std::vector<stk::io::MeshField>::iterator I = m_fields.begin();
             while (I != m_fields.end()) {
                 const stk::mesh::FieldBase *f = (*I).field();
-                std::vector<const stk::mesh::Part*>::iterator P = (*I).m_subsetParts.begin();
+                stk::mesh::ConstPartVector::iterator P = (*I).m_subsetParts.begin();
                 while (P != (*I).m_subsetParts.end()) {
                     // Find the Ioss::GroupingEntity corresponding to this part...
                     const stk::mesh::Part *part = *P; ++P;

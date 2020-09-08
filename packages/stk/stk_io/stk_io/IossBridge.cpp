@@ -309,7 +309,7 @@ namespace {
   void internal_field_data_from_ioss(const stk::mesh::BulkData& mesh,
                                      const Ioss::Field &io_field,
                                      const stk::mesh::FieldBase *field,
-                                     std::vector<stk::mesh::Entity> &entities,
+                                     stk::mesh::EntityVector &entities,
                                      Ioss::GroupingEntity *io_entity)
   {
     size_t field_component_count = io_field.transformed_storage()->component_count();
@@ -349,7 +349,7 @@ namespace {
   void internal_subsetted_field_data_from_ioss(const stk::mesh::BulkData& mesh,
                                                const Ioss::Field &io_field,
                                                const stk::mesh::FieldBase *field,
-                                               std::vector<stk::mesh::Entity> &entities,
+                                               stk::mesh::EntityVector &entities,
                                                Ioss::GroupingEntity *io_entity,
                                                const stk::mesh::Part *stk_part)
   {
@@ -393,7 +393,7 @@ namespace {
   void internal_field_data_to_ioss(const stk::mesh::BulkData& mesh,
                                    const Ioss::Field &io_field,
                                    const stk::mesh::FieldBase *field,
-                                   std::vector<stk::mesh::Entity> &entities,
+                                   stk::mesh::EntityVector &entities,
                                    Ioss::GroupingEntity *io_entity)
   {
     size_t field_component_count = io_field.transformed_storage()->component_count();
@@ -433,8 +433,8 @@ namespace {
     // Determine whether the part 'part' needs to output any fields of rank 'rank'
     // to the output database.
 
-    const std::vector<stk::mesh::FieldBase *> &fields = stk::mesh::MetaData::get(part).get_fields();
-    std::vector<stk::mesh::FieldBase *>::const_iterator I = fields.begin();
+    const stk::mesh::FieldVector &fields = stk::mesh::MetaData::get(part).get_fields();
+    stk::mesh::FieldVector::const_iterator I = fields.begin();
     while (I != fields.end()) {
       const stk::mesh::FieldBase *f = *I ; ++I ;
 
@@ -540,7 +540,7 @@ namespace {
 
               const std::string dbName = attribute.db_name();
 
-              std::vector<stk::mesh::Entity> entities;
+              stk::mesh::EntityVector entities;
               stk::io::get_output_entity_list(ioBlock, rank, params, entities);
               stk::io::field_data_to_ioss(params.bulk_data(), stkField, entities, ioBlock, dbName, Ioss::Field::ATTRIBUTE);
           }
@@ -1291,9 +1291,9 @@ namespace stk {
                         const Ioss::Field::RoleType filter_role,
                         std::vector<FieldAndName> &namedFields)
     {
-      const std::vector<stk::mesh::FieldBase*> &fields = meta.get_fields();
+      const stk::mesh::FieldVector &fields = meta.get_fields();
       namedFields.reserve(fields.size());
-      std::vector<stk::mesh::FieldBase *>::const_iterator fieldIterator = fields.begin();
+      stk::mesh::FieldVector::const_iterator fieldIterator = fields.begin();
       for(;fieldIterator != fields.end();++fieldIterator) {
           const Ioss::Field::RoleType *role = stk::io::get_field_role(**fieldIterator);
           if (role && *role == filter_role) {
@@ -1404,7 +1404,7 @@ namespace stk {
     void get_entity_list(Ioss::GroupingEntity *io_entity,
                          stk::mesh::EntityRank part_type,
                          const stk::mesh::BulkData &bulk,
-                         std::vector<stk::mesh::Entity> &entities)
+                         stk::mesh::EntityVector &entities)
     {
       if (io_entity->type() == Ioss::SIDEBLOCK) {
 	std::vector<INT> elem_side ;
@@ -1429,7 +1429,7 @@ namespace stk {
     void get_input_entity_list(Ioss::GroupingEntity *io_entity,
                          stk::mesh::EntityRank part_type,
                          const stk::mesh::BulkData &bulk,
-                         std::vector<stk::mesh::Entity> &entities)
+                         stk::mesh::EntityVector &entities)
     {
       ThrowRequireMsg(io_entity->get_database()->is_input(), "Database is output type");
       if (db_api_int_size(io_entity) == 4) {
@@ -1442,7 +1442,7 @@ namespace stk {
     void get_output_entity_list(Ioss::GroupingEntity *io_entity,
                                 stk::mesh::EntityRank part_type,
                                 OutputParams &params,
-                                std::vector<stk::mesh::Entity> &entities)
+                                stk::mesh::EntityVector &entities)
     {
       const stk::mesh::BulkData &bulk = params.bulk_data();
       ThrowRequireMsg(!io_entity->get_database()->is_input(), "Database is input type");
@@ -1530,7 +1530,7 @@ namespace stk {
 
     void multistate_field_data_from_ioss(const stk::mesh::BulkData& mesh,
                                          const stk::mesh::FieldBase *field,
-                                         std::vector<stk::mesh::Entity> &entity_list,
+                                         stk::mesh::EntityVector &entity_list,
                                          Ioss::GroupingEntity *io_entity,
                                          const std::string &name,
                                          const size_t state_count,
@@ -1560,7 +1560,7 @@ namespace stk {
 
     void subsetted_multistate_field_data_from_ioss(const stk::mesh::BulkData& mesh,
                                                    const stk::mesh::FieldBase *field,
-                                                   std::vector<stk::mesh::Entity> &entity_list,
+                                                   stk::mesh::EntityVector &entity_list,
                                                    Ioss::GroupingEntity *io_entity,
                                                    const stk::mesh::Part *stk_part,
                                                    const std::string &name,
@@ -1592,7 +1592,7 @@ namespace stk {
 
     void field_data_from_ioss(const stk::mesh::BulkData& mesh,
                               const stk::mesh::FieldBase *field,
-                              std::vector<stk::mesh::Entity> &entities,
+                              stk::mesh::EntityVector &entities,
                               Ioss::GroupingEntity *io_entity,
                               const std::string &io_fld_name)
     {
@@ -1635,7 +1635,7 @@ namespace stk {
 
     void subsetted_field_data_from_ioss(const stk::mesh::BulkData& mesh,
                                         const stk::mesh::FieldBase *field,
-                                        std::vector<stk::mesh::Entity> &entities,
+                                        stk::mesh::EntityVector &entities,
                                         Ioss::GroupingEntity *io_entity,
                                         const stk::mesh::Part *stk_part,
                                         const std::string &io_fld_name)
@@ -1675,7 +1675,7 @@ namespace stk {
 
     void multistate_field_data_to_ioss(const stk::mesh::BulkData& mesh,
                                        const stk::mesh::FieldBase *field,
-                                       std::vector<stk::mesh::Entity> &entities,
+                                       stk::mesh::EntityVector &entities,
                                        Ioss::GroupingEntity *io_entity,
                                        const std::string &io_fld_name,
                                        Ioss::Field::RoleType filter_role,
@@ -1693,7 +1693,7 @@ namespace stk {
 
     void field_data_to_ioss(const stk::mesh::BulkData& mesh,
                             const stk::mesh::FieldBase *field,
-                            std::vector<stk::mesh::Entity> &entities,
+                            stk::mesh::EntityVector &entities,
                             Ioss::GroupingEntity *io_entity,
                             const std::string &io_fld_name,
                             Ioss::Field::RoleType filter_role)
@@ -2195,7 +2195,7 @@ namespace stk {
           if (subset_selector) selector &= *subset_selector;
           if (output_selector) selector &= *output_selector;
 
-          std::vector<mesh::Entity> entities;
+          mesh::EntityVector entities;
           get_selected_nodes(params, selector, entities);
 
           std::vector<int> sharingProcs;
@@ -2423,8 +2423,8 @@ namespace stk {
 
         const mesh::MetaData & meta_data = mesh::MetaData::get(*part);
 
-        const std::vector<mesh::FieldBase *> &fields = meta_data.get_fields();
-        std::vector<mesh::FieldBase *>::const_iterator I = fields.begin();
+        const mesh::FieldVector &fields = meta_data.get_fields();
+        mesh::FieldVector::const_iterator I = fields.begin();
         while (I != fields.end()) {
           const mesh::FieldBase *f = *I ; ++I ;
           const Ioss::Field::RoleType *role = stk::io::get_field_role(*f);
@@ -2450,7 +2450,7 @@ namespace stk {
         const stk::mesh::BulkData &bulk = params.bulk_data();
         stk::mesh::EntityRank rank = get_output_rank(params);
 
-        std::vector<mesh::Entity> nodes;
+        mesh::EntityVector nodes;
         size_t num_nodes = get_entities_for_nodeblock(params, part, rank,
                                                       nodes, true);
 
@@ -2482,8 +2482,8 @@ namespace stk {
         assert(coord_field != nullptr);
         field_data_to_ioss(bulk, coord_field, nodes, &nb, "mesh_model_coordinates", Ioss::Field::MESH);
 
-        const std::vector<mesh::FieldBase *> &fields = meta_data.get_fields();
-        std::vector<mesh::FieldBase *>::const_iterator I = fields.begin();
+        const mesh::FieldVector &fields = meta_data.get_fields();
+        mesh::FieldVector::const_iterator I = fields.begin();
         while (I != fields.end()) {
           const mesh::FieldBase *f = *I ; ++I ;
           if (stk::io::is_valid_part_field(f, part_primary_entity_rank(part), part,
@@ -2539,7 +2539,7 @@ namespace stk {
 
       template <typename INT>
       void output_element_block_skin_map(stk::io::OutputParams &params, Ioss::ElementBlock *block,
-                                         const std::vector<mesh::Entity>& meshObjects)
+                                         const mesh::EntityVector& meshObjects)
       {
         const stk::mesh::BulkData& stkmesh = params.bulk_data();
         bool skin_mesh = params.has_skin_mesh_selector();
@@ -2594,7 +2594,7 @@ namespace stk {
           return;
         }
 
-        std::vector<mesh::Entity> elements;
+        mesh::EntityVector elements;
         stk::mesh::EntityRank type = part_primary_entity_rank(*part);
         if (params.has_skin_mesh_selector()) {
           type = meta_data.side_rank();
@@ -2631,8 +2631,8 @@ namespace stk {
         }
 
         stk::mesh::EntityRank elem_rank = stk::topology::ELEMENT_RANK;
-        const std::vector<mesh::FieldBase *> &fields = meta_data.get_fields();
-        std::vector<mesh::FieldBase *>::const_iterator I = fields.begin();
+        const mesh::FieldVector &fields = meta_data.get_fields();
+        mesh::FieldVector::const_iterator I = fields.begin();
         while (I != fields.end()) {
           const mesh::FieldBase *f = *I ; ++I ;
           const Ioss::Field::RoleType *role = stk::io::get_field_role(*f);
@@ -2653,7 +2653,7 @@ namespace stk {
       void output_nodeset_distribution_factor(const stk::mesh::BulkData& bulk,
                                               Ioss::NodeSet* ns,
                                               stk::mesh::Part* part,
-                                              std::vector<stk::mesh::Entity>& nodes)
+                                              stk::mesh::EntityVector& nodes)
       {
           const stk::mesh::MetaData & metaData = bulk.mesh_meta_data();
           const std::string& name = ns->name();
@@ -2712,7 +2712,7 @@ namespace stk {
           }
         }
 
-        std::vector<stk::mesh::Entity> nodes;
+        stk::mesh::EntityVector nodes;
         mesh::EntityRank rank = get_output_rank(params);
         size_t num_nodes = get_entities_for_nodeblock(params, *part, rank, nodes, true);
 
@@ -2733,8 +2733,8 @@ namespace stk {
 
         output_nodeset_distribution_factor<INT>(bulk, ns, part, nodes);
 
-        const std::vector<mesh::FieldBase *> &fields = meta_data.get_fields();
-        std::vector<mesh::FieldBase *>::const_iterator I = fields.begin();
+        const mesh::FieldVector &fields = meta_data.get_fields();
+        mesh::FieldVector::const_iterator I = fields.begin();
         while (I != fields.end()) {
           const mesh::FieldBase *f = *I ; ++I ;
           const Ioss::Field::RoleType *role = stk::io::get_field_role(*f);
@@ -2762,7 +2762,7 @@ namespace stk {
           if (subset_selector) selector &= *subset_selector;
           if (output_selector) selector &= *output_selector;
 
-          std::vector<mesh::Entity> entities;
+          mesh::EntityVector entities;
           get_selected_nodes(params, selector, entities);
 
           const std::string cs_name("node_symm_comm_spec");
@@ -2822,7 +2822,7 @@ namespace stk {
           throw std::runtime_error( msg.str() );
         }
 
-        std::vector<mesh::Entity> edges;
+        mesh::EntityVector edges;
         stk::mesh::EntityRank type = part_primary_entity_rank(*part);
         size_t num_edges = get_entities(params, *part, type, edges, false);
 
@@ -2855,7 +2855,7 @@ namespace stk {
         }
 
         stk::mesh::EntityRank edge_rank = stk::topology::EDGE_RANK;
-        const std::vector<mesh::FieldBase *> &fields = meta_data.get_fields();
+        const mesh::FieldVector &fields = meta_data.get_fields();
         for(const mesh::FieldBase* f : fields) {
           const Ioss::Field::RoleType *role = stk::io::get_field_role(*f);
           if (role != nullptr && *role == Ioss::Field::ATTRIBUTE) {
@@ -3155,13 +3155,13 @@ namespace stk {
                         Ioss::GroupingEntity *io_entity,
                         Ioss::Field::RoleType filter_role)
     {
-      std::vector<stk::mesh::Entity> entities;
+      stk::mesh::EntityVector entities;
       stk::io::get_output_entity_list(io_entity, part_type, params, entities);
 
       stk::mesh::MetaData & meta = stk::mesh::MetaData::get(part);
-      const std::vector<stk::mesh::FieldBase*> &fields = meta.get_fields();
+      const stk::mesh::FieldVector &fields = meta.get_fields();
 
-      std::vector<stk::mesh::FieldBase *>::const_iterator I = fields.begin();
+      stk::mesh::FieldVector::const_iterator I = fields.begin();
       while (I != fields.end()) {
         const stk::mesh::FieldBase *f = *I; ++I;
         if (stk::io::is_valid_part_field(f, part_type, part, filter_role)) {
@@ -3382,7 +3382,7 @@ namespace stk {
     {
       const stk::mesh::Part* part = bulk.mesh_meta_data().get_part(name);
       if (part != nullptr) {
-        std::vector<const stk::mesh::Part*> touching_parts = bulk.mesh_meta_data().get_blocks_touching_surface(part);
+        stk::mesh::ConstPartVector touching_parts = bulk.mesh_meta_data().get_blocks_touching_surface(part);
         if (touching_parts.size() == 1) {
           parent_element_block = touching_parts[0];
         }

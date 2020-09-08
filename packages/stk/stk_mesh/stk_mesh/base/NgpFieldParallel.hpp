@@ -48,7 +48,7 @@ void parallel_sum(const stk::mesh::BulkData & bulk, const std::vector<stk::mesh:
                   bool doFinalSyncBackToDevice = true)
 {
   const stk::mesh::MetaData & meta = bulk.mesh_meta_data();
-  const std::vector<stk::mesh::FieldBase *> & allStkFields = meta.get_fields();
+  const FieldVector & allStkFields = meta.get_fields();
 
   std::vector<const stk::mesh::FieldBase *> stkFields;
   for (stk::mesh::NgpField<T> * ngpField : ngpFields) {
@@ -72,7 +72,7 @@ void copy_owned_to_shared(const stk::mesh::BulkData & bulk, const std::vector<st
                           bool doFinalSyncBackToDevice = true)
 {
   const stk::mesh::MetaData & meta = bulk.mesh_meta_data();
-  const std::vector<stk::mesh::FieldBase *> & allStkFields = meta.get_fields();
+  const FieldVector & allStkFields = meta.get_fields();
 
   std::vector<const stk::mesh::FieldBase *> stkFields;
   for (stk::mesh::NgpField<T> * ngpField : ngpFields) {
@@ -97,7 +97,7 @@ void communicate_field_data(const stk::mesh::Ghosting & ghosting,
                             bool doFinalSyncBackToDevice = true)
 {
   const stk::mesh::MetaData & meta = ghosting.mesh().mesh_meta_data();
-  const std::vector<stk::mesh::FieldBase *> & allStkFields = meta.get_fields();
+  const FieldVector & allStkFields = meta.get_fields();
 
   std::vector<const stk::mesh::FieldBase *> stkFields;
   for (stk::mesh::NgpField<T> * ngpField : ngpFields) {
@@ -122,7 +122,7 @@ void communicate_field_data(const stk::mesh::BulkData & bulk,
                             bool doFinalSyncBackToDevice = true)
 {
   const stk::mesh::MetaData & meta = bulk.mesh_meta_data();
-  const std::vector<stk::mesh::FieldBase *> & allStkFields = meta.get_fields();
+  const FieldVector & allStkFields = meta.get_fields();
 
   std::vector<const stk::mesh::FieldBase *> stkFields;
   for (stk::mesh::NgpField<T> * ngpField : ngpFields) {

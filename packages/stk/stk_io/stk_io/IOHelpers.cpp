@@ -410,7 +410,7 @@ void internal_add_global(Teuchos::RCP<Ioss::Region> region,
 
 size_t get_entities(const stk::mesh::Part &part,
                     const stk::mesh::BulkData &bulk,
-                    std::vector<stk::mesh::Entity> &entities,
+                    stk::mesh::EntityVector &entities,
                     const stk::mesh::Selector *subset_selector)
 {
     stk::mesh::MetaData & meta = stk::mesh::MetaData::get(part);
@@ -460,7 +460,7 @@ void unpack_distribution_factor(const stk::mesh::BulkData& bulk,
 
 void communicate_shared_side_entity_fields(const stk::mesh::BulkData& bulk,
                                            const stk::mesh::FieldBase* distFact,
-                                           std::vector<stk::mesh::Entity>& sides)
+                                           stk::mesh::EntityVector& sides)
 {
     stk::CommSparse comm(bulk.parallel());
 
@@ -524,7 +524,7 @@ void process_surface_entity_df(const Ioss::SideSet* sset, stk::mesh::BulkData & 
             stk::mesh::EntityRank side_rank = par_dimen == 1 ? stk::topology::EDGE_RANK : stk::topology::FACE_RANK;
 
             // Would be nice to do:
-            //    std::vector<stk::mesh::Entity> sides ;
+            //    stk::mesh::EntityVector sides ;
             //    get_entities(*sb_part, bulk, sides, nullptr);
             // But, we need the entities in the exact same order and count  as they appear on the
             // mesh file.  The get_entities can give them in different order and will ignore duplicated
@@ -534,7 +534,7 @@ void process_surface_entity_df(const Ioss::SideSet* sset, stk::mesh::BulkData & 
             block->get_field_data("element_side", elemSidePairs);
             size_t side_count = elemSidePairs.size()/2;
 
-            std::vector<stk::mesh::Entity> sides;
+            stk::mesh::EntityVector sides;
             sides.reserve(side_count);
 
             for (size_t is = 0; is < side_count; ++is) {
@@ -605,7 +605,7 @@ void process_node_coords_and_attributes(Ioss::Region &region, stk::mesh::BulkDat
     std::vector<INT> ids;
     nb->get_field_data("ids", ids);
 
-    std::vector<stk::mesh::Entity> nodes;
+    stk::mesh::EntityVector nodes;
     nodes.reserve(node_count);
     for (size_t i=0; i < ids.size(); i++) {
         stk::mesh::Entity node = bulk.get_entity(stk::topology::NODE_RANK, ids[i]);
@@ -697,7 +697,7 @@ void process_elem_attributes_and_implicit_ids(Ioss::Region &region, stk::mesh::B
             entity->get_field_data("ids", elem_ids);
 
             size_t element_count = elem_ids.size();
-            std::vector<stk::mesh::Entity> elements;
+            stk::mesh::EntityVector elements;
             elements.reserve(element_count);
 
             for(size_t i=0; i<element_count; ++i) {
@@ -786,7 +786,7 @@ void process_nodesets_df(Ioss::Region &region, stk::mesh::BulkData &bulk)
             std::vector<INT> node_ids ;
             size_t node_count = entity->get_field_data("ids", node_ids);
 
-            std::vector<stk::mesh::Entity> nodes(node_count);
+            stk::mesh::EntityVector nodes(node_count);
             for(size_t i=0; i<node_count; ++i) {
                 nodes[i] = bulk.get_entity(stk::topology::NODE_RANK, node_ids[i] );
                 if (!bulk.is_valid(nodes[i]) ) {
@@ -869,7 +869,7 @@ void internal_fill_output_entities(Ioss::GroupingEntity *io_entity,
                                    stk::mesh::Part *part,
                                    stk::mesh::EntityRank part_type,
                                    OutputParams &params,
-                                   std::vector<stk::mesh::Entity> &entities)
+                                   stk::mesh::EntityVector &entities)
 {
     if(io_entity->type() == Ioss::SIDEBLOCK)
     {
@@ -922,7 +922,7 @@ void put_field_data(OutputParams &params,
 
     if (hasFieldsToProcess)
     {
-        std::vector<stk::mesh::Entity> entities;
+        stk::mesh::EntityVector entities;
         internal_fill_output_entities(io_entity, &part, part_type, params, entities);
 
         for (const stk::io::FieldAndName& namedField: namedFields) {

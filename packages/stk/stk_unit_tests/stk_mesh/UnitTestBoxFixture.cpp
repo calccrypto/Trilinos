@@ -134,7 +134,7 @@ TEST( UnitTestBoxFixture, verifyBoxFixture )
 
     const EntityId elem_id =  1 + i + j * ngx + k * ngx * ngy;
 
-    std::vector<Entity> nodes(8);
+    EntityVector nodes(8);
     nodes[0] = bulk.get_entity( NODE_RANK, n0 );
     nodes[1] = bulk.get_entity( NODE_RANK, n1 );
     nodes[2] = bulk.get_entity( NODE_RANK, n2 );
@@ -146,7 +146,7 @@ TEST( UnitTestBoxFixture, verifyBoxFixture )
 
     Entity elem = bulk.get_entity( element_rank, elem_id );
 
-    std::vector<Entity> elems ;
+    EntityVector elems ;
     stk::mesh::get_entities_through_relations(bulk, nodes , elems );
     ASSERT_EQ( elems.size() , size_t(1) );
     ASSERT_TRUE( elems[0] == elem );

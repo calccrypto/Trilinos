@@ -130,7 +130,7 @@ TEST(ElementGraph, heterogeneous_mesh)
                     os << "skin_" << bulk_data.identifier(elem);
                     stk::mesh::PartVector add_parts;
                     add_parts.push_back(meta_data.get_part(os.str()));
-                    bulk_data.change_entity_parts(faces[j], add_parts, {});
+                    bulk_data.change_entity_parts(faces[j], add_parts, stk::mesh::PartVector{});
 
                 }
                 EXPECT_EQ(gold_num_faces, num_faces) << "element " << id << " has topology " << bulk_data.bucket(elem).topology() << " with num faces " << num_faces << " not same as gold value " << gold_num_faces << std::endl;

@@ -103,7 +103,7 @@ void testSidesetCreation(TestData &testData)
     bulkData.modification_end();
 
     //BEGINDOC1
-    std::vector<const stk::mesh::Part*> blocks;
+    stk::mesh::ConstPartVector blocks;
     for(const std::string& blockName : testData.blockNames)
     {
         stk::mesh::Part *block = meta.get_part(blockName);

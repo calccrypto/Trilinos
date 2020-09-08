@@ -94,7 +94,7 @@ TEST(UnitTestingOfRelation, testRelationCoverage)
   Entity node0 = (*bulk.buckets(stk::topology::NODE_RANK)[0])[0];
 
   bulk.modification_begin();
-  std::vector<Part*> empty_parts;
+  PartVector empty_parts;
   stk::mesh::EntityId  new_id = bulk.parallel_rank() + 1;
   Entity edge = bulk.declare_edge(new_id, empty_parts);
 

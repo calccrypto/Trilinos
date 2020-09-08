@@ -179,15 +179,15 @@ void expect_all_fields_equal(stk::mesh::MetaData &oldMeta, stk::mesh::MetaData &
 
 void expect_surface_to_block_mappings_equal(stk::mesh::MetaData &oldMeta, stk::mesh::MetaData &newMeta)
 {
-    std::vector<const stk::mesh::Part *> oldSurfacesInMap = oldMeta.get_surfaces_in_surface_to_block_map();
-    std::vector<const stk::mesh::Part *> newSurfacesInMap = newMeta.get_surfaces_in_surface_to_block_map();
+    stk::mesh::ConstPartVector oldSurfacesInMap = oldMeta.get_surfaces_in_surface_to_block_map();
+    stk::mesh::ConstPartVector newSurfacesInMap = newMeta.get_surfaces_in_surface_to_block_map();
 
     ASSERT_EQ(oldSurfacesInMap.size(), newSurfacesInMap.size());
 
     for(size_t i=0;i<oldSurfacesInMap.size();++i)
     {
-        std::vector<const stk::mesh::Part*> oldBlocks = oldMeta.get_blocks_touching_surface(oldSurfacesInMap[i]);
-        std::vector<const stk::mesh::Part*> newBlocks = newMeta.get_blocks_touching_surface(newSurfacesInMap[i]);
+        stk::mesh::ConstPartVector oldBlocks = oldMeta.get_blocks_touching_surface(oldSurfacesInMap[i]);
+        stk::mesh::ConstPartVector newBlocks = newMeta.get_blocks_touching_surface(newSurfacesInMap[i]);
         ASSERT_EQ(oldBlocks.size(), newBlocks.size());
         for(size_t j=0; j<oldBlocks.size(); ++j)
         {

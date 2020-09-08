@@ -75,7 +75,7 @@ using stk::mesh::fixtures::SelectorFixture ;
 
 stk::mesh::EntityId
 addEntitiesToFixture(SelectorFixture& fixture, stk::mesh::EntityId start_id, size_t num_to_add,
-                     const std::vector<stk::mesh::Part*> &partMembership,
+                     const stk::mesh::PartVector &partMembership,
                      std::vector<stk::mesh::Entity> &collector)
 {
   stk::mesh::EntityId ent_id = start_id;
@@ -105,7 +105,7 @@ void initializeFiveEntityCollections(SelectorFixture& fixture,
 
   const size_t bf_size = bucket_size * lb_num_buckets_per_partition;
   stk::mesh::EntityId ent_id = 1001;   // Want to keep numerical alignment.
-  std::vector<stk::mesh::Part*> partMembership;
+  stk::mesh::PartVector partMembership;
 
   // Note that the loop variables start at 1 because SelectorFixture::generate_mesh() has
   // already created an Entity in each partition.

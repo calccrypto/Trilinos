@@ -504,7 +504,7 @@ namespace stk {
       // to "end_output_step"
       int write_defined_output_fields(size_t output_file_index, const stk::mesh::FieldState *state = nullptr) const;
       int write_defined_output_fields_for_selected_subset(size_t output_file_index,
-                                                          std::vector<stk::mesh::Part*>& selectOutputElementParts,
+                                                          stk::mesh::PartVector& selectOutputElementParts,
                                                           const stk::mesh::FieldState *state = nullptr) const;
 
       // Force all output databases to "flush" their data to disk (if possible)
@@ -674,7 +674,7 @@ namespace stk {
       int check_integer_size_requirements() const;
       void create_surface_to_block_mapping();
 
-      std::vector<stk::mesh::Entity> get_output_entities(size_t outputIndex, const stk::mesh::BulkData& bulk_data, const std::string &name) const;
+      stk::mesh::EntityVector get_output_entities(size_t outputIndex, const stk::mesh::BulkData& bulk_data, const std::string &name) const;
       //-END
     protected:
       void set_sideset_face_creation_behavior_for_testing(SideSetFaceCreationBehavior behavior)

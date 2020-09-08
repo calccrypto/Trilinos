@@ -60,7 +60,7 @@ print( std::ostream & os , const char * const lead , const Part & p )
   const PartVector & supersets = p.supersets();
   const PartVector & subsets   = p.subsets();
 
-  std::vector<Part*>::const_iterator i;
+  PartVector::const_iterator i;
 
   if ( lead != NULL ) { os << lead ; }
   os << "Part[ ";

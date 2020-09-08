@@ -116,7 +116,7 @@ void create_all_sides(stk::mesh::BulkData &bulkData, const stk::mesh::Selector &
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-Entity get_side_entity_from_ordinal(const std::vector<Entity> &sides, ConnectivityOrdinal const * ordinals, ConnectivityOrdinal requestedOrdinal)
+Entity get_side_entity_from_ordinal(const EntityVector &sides, ConnectivityOrdinal const * ordinals, ConnectivityOrdinal requestedOrdinal)
 {
     for(unsigned i = 0; i<sides.size(); ++i)
     {
@@ -131,7 +131,7 @@ Entity get_side_entity_for_element_side_pair(BulkData &bulkData, const SideSetEn
 {
     const Entity * sides = bulkData.begin(facet.element, bulkData.mesh_meta_data().side_rank());
     ConnectivityOrdinal const * ordinals = bulkData.begin_ordinals(facet.element, bulkData.mesh_meta_data().side_rank());
-    std::vector<Entity> sideVector(sides, sides+bulkData.num_sides(facet.element));
+    EntityVector sideVector(sides, sides+bulkData.num_sides(facet.element));
     return get_side_entity_from_ordinal(sideVector, ordinals, facet.side);
 }
 

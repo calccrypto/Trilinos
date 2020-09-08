@@ -352,7 +352,7 @@ void create_edges( BulkData & mesh, const Selector & element_selector, Part * pa
       {
         BucketVector const& element_buckets = mesh.get_buckets(stk::topology::ELEMENT_RANK, element_selector & !mesh.mesh_meta_data().locally_owned_part());
 
-        std::vector<Entity> elements;
+        EntityVector elements;
         for(size_t i=0, e=element_buckets.size(); i<e; ++i) {
           Bucket& b = *element_buckets[i];
           stk::topology elemTopology = b.topology();

@@ -121,7 +121,7 @@ void internal_add_global(Teuchos::RCP<Ioss::Region> region,
 
 size_t get_entities(const stk::mesh::Part &part,
                     const stk::mesh::BulkData &bulk,
-                    std::vector<stk::mesh::Entity> &entities,
+                    stk::mesh::EntityVector &entities,
                     const stk::mesh::Selector *subset_selector);
 
 bool is_skipped_attribute_field(const std::string &name, size_t numAttrFields);
@@ -143,7 +143,7 @@ void internal_fill_output_entities(Ioss::GroupingEntity *io_entity,
                                  stk::mesh::Part *part,
                                  stk::mesh::EntityRank part_type,
                                  OutputParams &params,
-                                 std::vector<stk::mesh::Entity> &entities);
+                                 stk::mesh::EntityVector &entities);
 
 void put_field_data(OutputParams &params,
                   stk::mesh::Part &part,

@@ -433,7 +433,7 @@ void StkMeshIoBroker::create_surface_to_block_mapping()
     for(IossBlockMembership::iterator iter = blockMemberships.begin(); iter != blockMemberships.end(); iter++) {
         stk::mesh::Part* sidesetPart = meta_data().get_part(iter->first);
         if(sidesetPart != nullptr && sidesetPart->primary_entity_rank() == meta_data().side_rank()) {
-            std::vector<const stk::mesh::Part*> blocks;
+            stk::mesh::ConstPartVector blocks;
             fill_block_parts_given_names(iter->second, meta_data(), blocks);
             meta_data().set_surface_to_block_mapping(sidesetPart, blocks);
         }
@@ -581,7 +581,7 @@ int StkMeshIoBroker::write_defined_output_fields(size_t output_file_index, const
 }
 
 int StkMeshIoBroker::write_defined_output_fields_for_selected_subset(size_t output_file_index,
-                                                                     std::vector<stk::mesh::Part*>& selectOutputElementParts,
+                                                                     stk::mesh::PartVector& selectOutputElementParts,
                                                                      const stk::mesh::FieldState *state) const
 {
     validate_output_file_index(output_file_index);
@@ -1418,11 +1418,11 @@ size_t StkMeshIoBroker::get_heartbeat_global_component_count(size_t heartbeat_fi
     return comp_count;
 }
 
-std::vector<stk::mesh::Entity> StkMeshIoBroker::get_output_entities(size_t output_index,
+stk::mesh::EntityVector StkMeshIoBroker::get_output_entities(size_t output_index,
                                                                     const stk::mesh::BulkData& bulk_data,
                                                                     const std::string &name) const
 {
-    std::vector<stk::mesh::Entity> entities;
+    stk::mesh::EntityVector entities;
 
     if(is_output_index_valid(output_index)) {
         entities = m_outputFiles[output_index]->get_output_entities(bulk_data, name);

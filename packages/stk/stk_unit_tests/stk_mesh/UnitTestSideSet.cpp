@@ -123,7 +123,7 @@ void create_two_elem_block_mesh_with_spanning_sidesets(const std::string& filena
     EXPECT_TRUE(surface_1_quad4 != nullptr);
     EXPECT_TRUE(surface_2_quad4 != nullptr);
 
-    std::vector<const stk::mesh::Part*> touchingParts{block_1, &block_2};
+    stk::mesh::ConstPartVector touchingParts{block_1, &block_2};
 
     meta.set_surface_to_block_mapping(surface_1, touchingParts);
     meta.set_surface_to_block_mapping(surface_2, touchingParts);

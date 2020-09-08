@@ -90,7 +90,7 @@ void GridFixture::generate_grid()
     fill_node_map(num_nodes, num_quad_faces, i_rank);
   }
 
-  std::vector<Entity> all_entities;
+  EntityVector all_entities;
 
   // assign ids, quads, nodes, then shells
   // (we need this order to be this way in order for our connectivity setup to  work)
@@ -143,7 +143,7 @@ void GridFixture::generate_grid()
 void GridFixture::fill_node_map(unsigned num_nodes, unsigned num_quad_faces, int p_rank)
 {
   const unsigned p_size = m_bulk_data.parallel_size();
-  std::vector<Entity> all_entities;
+  EntityVector all_entities;
 
   // assign ids, quads, nodes, then shells
   // (we need this order to be this way in order for our connectivity setup to  work)
@@ -186,4 +186,3 @@ void GridFixture::fill_node_map(unsigned num_nodes, unsigned num_quad_faces, int
 } // fixtures
 } // mesh
 } // stk
-

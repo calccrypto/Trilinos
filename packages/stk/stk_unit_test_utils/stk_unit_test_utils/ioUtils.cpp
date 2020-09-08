@@ -42,7 +42,7 @@ void IdAndTimeFieldValueSetter::populate_field(stk::mesh::BulkData &bulk, stk::m
 {
     stk::mesh::EntityRank fieldRank = field->entity_rank();
 
-    std::vector<stk::mesh::Entity> entities;
+    stk::mesh::EntityVector entities;
     stk::mesh::get_entities(bulk, fieldRank, entities);
 
     stk::mesh::FieldVector allTransientFields = stk::io::get_transient_fields(bulk.mesh_meta_data());
@@ -100,4 +100,3 @@ void generate_mesh_from_serial_spec_and_load_in_parallel_with_auto_decomp(const 
 
 } // namespace unit_test_util
 } // namespace stk
-

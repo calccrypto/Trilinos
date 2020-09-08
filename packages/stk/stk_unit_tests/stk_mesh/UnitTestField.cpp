@@ -205,10 +205,10 @@ TEST(UnitTestField, testFieldWithSelector)
   // Declare 10 nodes on each part
 
   for ( unsigned i = 1 ; i < 11 ; ++i )
-      bulk_data.declare_node(i, std::vector< stk::mesh::Part * >(1, &p0));
+      bulk_data.declare_node(i, stk::mesh::PartVector(1, &p0));
 
   for ( unsigned i = 11 ; i < 21 ; ++i )
-    bulk_data.declare_node(i, std::vector< stk::mesh::Part * >(1, &p1));
+    bulk_data.declare_node(i, stk::mesh::PartVector(1, &p1));
 
   const stk::mesh::BucketVector & node_buckets =
     bulk_data.buckets( NODE_RANK );
@@ -1553,4 +1553,3 @@ TEST(SharedSidesetField, verifySidesetFieldAfterMeshRead) {
   unlink(serialOutputMeshName.c_str());
 }
 } //namespace <anonymous>
-

@@ -299,7 +299,7 @@ std::vector<SideSetEntry> SkinMeshUtil::extract_interior_sideset()
 }
 
 void get_aura_element_sides_for_skinning(const stk::mesh::BulkData& bulk, stk::mesh::Entity element,
-                                 std::vector<int>& exposedSides, std::vector<stk::mesh::Entity>& elems)
+                                 std::vector<int>& exposedSides, EntityVector& elems)
 {
     exposedSides.clear();
     stk::topology topo = bulk.bucket(element).topology();

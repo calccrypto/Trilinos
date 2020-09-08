@@ -49,12 +49,12 @@ std::vector<std::string> get_messages_for_split_coincident_elements(const stk::m
 std::vector<stk::mesh::EntityKeyProc> get_non_unique_key_procs(const stk::mesh::BulkData& bulkData);
 std::vector<std::string> get_non_unique_key_messages(const stk::mesh::BulkData& bulkData, const std::vector<stk::mesh::EntityKeyProc> &badKeyProcs);
 
-std::vector<stk::mesh::Entity> get_orphaned_owned_sides(const stk::mesh::BulkData& bulkData);
-std::vector<stk::mesh::Entity> get_orphaned_sides_with_attached_element_on_different_proc(const stk::mesh::BulkData& bulkData);
-std::vector<std::string> get_messages_for_orphaned_owned_sides(const stk::mesh::BulkData& bulkData, std::vector<stk::mesh::Entity>& keys);
+EntityVector get_orphaned_owned_sides(const stk::mesh::BulkData& bulkData);
+EntityVector get_orphaned_sides_with_attached_element_on_different_proc(const stk::mesh::BulkData& bulkData);
+std::vector<std::string> get_messages_for_orphaned_owned_sides(const stk::mesh::BulkData& bulkData, EntityVector& keys);
 
-std::vector<stk::mesh::Entity> get_solo_sides_without_element_on_different_proc(const stk::mesh::BulkData& bulkData);
-std::vector<std::string> get_messages_for_solo_sides(const stk::mesh::BulkData& bulkData, std::vector<stk::mesh::Entity>& entities);
+EntityVector get_solo_sides_without_element_on_different_proc(const stk::mesh::BulkData& bulkData);
+std::vector<std::string> get_messages_for_solo_sides(const stk::mesh::BulkData& bulkData, EntityVector& entities);
 
 
 void throw_if_any_proc_has_false(MPI_Comm comm, bool is_all_ok_locally);

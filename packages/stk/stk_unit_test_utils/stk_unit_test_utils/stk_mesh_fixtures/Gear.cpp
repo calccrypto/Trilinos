@@ -206,7 +206,7 @@ void Gear::generate_gear()
 
   //setup hex elements
   {
-    std::vector<Part*> add_parts, remove_parts ;
+    PartVector add_parts, remove_parts ;
     add_parts.push_back( & cylindrical_coord_part );
     add_parts.push_back( & gear_part );
     add_parts.push_back( & hex_part );
@@ -243,7 +243,7 @@ void Gear::generate_gear()
 
   //setup wedges elements
   {
-    std::vector<Part*> add_parts, remove_parts ;
+    PartVector add_parts, remove_parts ;
     add_parts.push_back( & cylindrical_coord_part );
     add_parts.push_back( & gear_part );
     add_parts.push_back( & wedge_part );

@@ -63,7 +63,7 @@ std::vector<std::string> find_nodeset_names_from_id(const stk::mesh::BulkData & 
     return (GetEntityNamesFromIDs( meshBulk, stk::topology::NODE_RANK, nodeset_ids));
 }
 
-void GetPartsByName(std::vector<stk::mesh::Part*> & parts,
+void GetPartsByName(stk::mesh::PartVector & parts,
                            const stk::mesh::BulkData& inBulk,
                            std::vector < std::string > names)
 {

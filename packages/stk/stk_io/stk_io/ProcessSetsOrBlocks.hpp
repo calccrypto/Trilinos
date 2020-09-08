@@ -191,7 +191,7 @@ void process_nodeblocks(Ioss::Region &region, stk::mesh::BulkData &bulk, stk::Pa
   stk::mesh::Part& nodePart = bulk.mesh_meta_data().get_topology_root_part(stk::topology::NODE);
   stk::mesh::PartVector nodeParts = {&nodePart};
 
-  std::vector<stk::mesh::Entity> nodes;
+  stk::mesh::EntityVector nodes;
   nodes.reserve(ids.size());
 
   bulk.declare_entities(stk::topology::NODE_RANK, ids, nodeParts, nodes);

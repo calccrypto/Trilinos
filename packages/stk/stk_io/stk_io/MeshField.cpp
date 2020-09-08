@@ -163,7 +163,7 @@ double MeshField::restore_field_data_at_step(Ioss::Region *region,
     while (I != m_fieldParts.end()) {
       const stk::mesh::EntityRank rank = (*I).get_entity_rank();
       Ioss::GroupingEntity *io_entity = (*I).get_io_entity();
-      std::vector<stk::mesh::Entity> entity_list;
+      stk::mesh::EntityVector entity_list;
       stk::io::get_input_entity_list(io_entity, rank, bulk, entity_list);
       const stk::mesh::Part *stk_part = (*I).get_stk_part();
       
@@ -246,7 +246,7 @@ double MeshField::restore_field_data(stk::mesh::BulkData &bulk,
       const Ioss::Field &io_field = io_entity->get_fieldref(m_dbName);
       size_t field_component_count = io_field.transformed_storage()->component_count();
 
-      std::vector<stk::mesh::Entity> entity_list;
+      stk::mesh::EntityVector entity_list;
       const stk::mesh::EntityRank rank = field_part.get_entity_rank();
       stk::io::get_input_entity_list(io_entity, rank, bulk, entity_list);
       

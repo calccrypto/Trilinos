@@ -922,7 +922,7 @@ public:
 
   virtual bool unpack_verify(CommBuffer & b)
   {
-    const std::vector<stk::mesh::FieldBase *> & localFields = m_meta.get_fields();
+    const FieldVector & localFields = m_meta.get_fields();
     bool ok = true;
 
     std::set<const stk::mesh::FieldBase *> unprocessedFields;
@@ -950,7 +950,7 @@ public:
     return ok;
   }
 
-  stk::mesh::FieldBase * get_local_field(const std::vector<FieldBase *> & localFields)
+  stk::mesh::FieldBase * get_local_field(const FieldVector & localFields)
   {
     stk::mesh::FieldBase * localField = nullptr;
     if (m_rootFieldOrdinal < localFields.size()) {

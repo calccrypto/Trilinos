@@ -83,7 +83,7 @@ const stk::mesh::Part* getElementBlockSelectorForElement(const stk::mesh::BulkDa
 
 void fill_block_parts_given_names(const std::vector<std::string>& side_block_names,
                                               stk::mesh::MetaData& meta,
-                                              std::vector<const stk::mesh::Part*>& blocks);
+                                              stk::mesh::ConstPartVector& blocks);
 
 void reconstruct_sideset(stk::mesh::BulkData& bulkData, const stk::mesh::Part& surfacePart);
 
@@ -126,7 +126,7 @@ std::pair<bool,bool> is_positive_sideset_polarity(const stk::mesh::BulkData &bul
 std::pair<bool,bool> is_positive_sideset_face_polarity(const stk::mesh::BulkData &bulk, stk::mesh::Entity face,
                                                        const stk::mesh::Part* activePart = nullptr);
 
-std::vector<const stk::mesh::Part*> get_sideset_io_parts(const stk::mesh::BulkData& bulkData, stk::mesh::Entity face);
+stk::mesh::ConstPartVector get_sideset_io_parts(const stk::mesh::BulkData& bulkData, stk::mesh::Entity face);
 
 void superset_mesh_parts(const stk::mesh::Part& part, stk::mesh::PartVector& supersetParts);
 

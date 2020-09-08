@@ -283,8 +283,8 @@ RelationIdentifier Relation::relation_ordinal() const
  */
 void get_entities_through_relations(
   const BulkData& mesh,
-  const std::vector<Entity> & entities ,
-        std::vector<Entity> & entities_related );
+  const EntityVector & entities ,
+        EntityVector & entities_related );
 
 /** \brief  Query which mesh entities have a relation
  *          to all of the input mesh entities of the given
@@ -292,9 +292,9 @@ void get_entities_through_relations(
  */
 void get_entities_through_relations(
   const BulkData& mesh,
-  const std::vector<Entity> & entities ,
+  const EntityVector & entities ,
         EntityRank             entities_related_rank ,
-        std::vector<Entity> & entities_related );
+        EntityVector & entities_related );
 
 /** \brief  Induce an entity's part membership based upon relationships
  *          from other entities.  Do not include and parts in the 'omit' list.

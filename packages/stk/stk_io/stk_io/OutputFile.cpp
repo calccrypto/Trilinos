@@ -213,12 +213,12 @@ void internal_fill_output_entities_for_sideblock(stk::io::OutputParams& params, 
     fill_data_for_side_block(params, *ge, part, parent_topology, elem_side_ids, sides);
 }
 
-std::vector<stk::mesh::Entity> OutputFile::get_output_entities(const stk::mesh::BulkData& bulk_data, const std::string &name)
+stk::mesh::EntityVector OutputFile::get_output_entities(const stk::mesh::BulkData& bulk_data, const std::string &name)
 {
     stk::mesh::Part *part = nullptr;
     const stk::mesh::MetaData& meta = bulk_data.mesh_meta_data();
 
-    std::vector<stk::mesh::Entity> entities;
+    stk::mesh::EntityVector entities;
 
     stk::io::OutputParams params(*m_region, bulk_data);
     setup_output_params(params);
@@ -684,7 +684,7 @@ int OutputFile::write_defined_output_fields(const stk::mesh::BulkData& bulk_data
 }
 
 int OutputFile::write_defined_output_fields_for_selected_subset(const stk::mesh::BulkData& bulk_data,
-                                                                      std::vector<stk::mesh::Part*>& selectOutputElementParts,
+                                                                      stk::mesh::PartVector& selectOutputElementParts,
                                                                       const stk::mesh::FieldState *state)
 {
     Ioss::Region *region = m_region.get();

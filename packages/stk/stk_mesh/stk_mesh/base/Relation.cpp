@@ -66,7 +66,7 @@ void get_entities_through_relations(
   Entity const *rels_end,
   const Entity* i_beg ,
   const Entity* i_end ,
-  std::vector<Entity> & entities_related )
+  EntityVector & entities_related )
 {
   for (Entity const *rels_left = rels_begin ; rels_left != rels_end ; ++rels_left )
   {
@@ -104,8 +104,8 @@ void get_entities_through_relations(
 
 void get_entities_through_relations(
   const BulkData &mesh,
-  const std::vector<Entity> & entities ,
-        std::vector<Entity> & entities_related )
+  const EntityVector & entities ,
+        EntityVector & entities_related )
 {
   entities_related.clear();
 
@@ -131,9 +131,9 @@ void get_entities_through_relations(
 
 void get_entities_through_relations(
   const BulkData& mesh,
-  const std::vector<Entity> & entities ,
+  const EntityVector & entities ,
         EntityRank              entities_related_rank ,
-        std::vector<Entity> & entities_related )
+        EntityVector & entities_related )
 {
   impl::find_entities_these_nodes_have_in_common(mesh, entities_related_rank,
                                                  entities.size(), entities.data(),

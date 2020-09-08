@@ -36,6 +36,7 @@
 
 #include <vector>
 #include <string>
+#include <stk_mesh/base/Types.hpp>
 
 namespace stk { namespace mesh { class BulkData; } }
 
@@ -59,7 +60,7 @@ std::vector<std::string> GetBlockNamesFromIDs(const stk::mesh::BulkData & meshBu
 
 std::vector<std::string> find_nodeset_names_from_id(const stk::mesh::BulkData & meshBulk, const std::vector<int> & nodeset_ids);
 
-void GetPartsByName(std::vector<stk::mesh::Part*> & parts,
+void GetPartsByName(stk::mesh::PartVector & parts,
                            const stk::mesh::BulkData& inBulk,
                            std::vector < std::string > names);
 

@@ -110,14 +110,14 @@ TEST(UnitTestChangeParts, test_batch_part_change)
     }
 
     stk::mesh::PartVector add_parts(1, &part);
-    bulkData.batch_change_entity_parts(nodes, add_parts, {});
+    bulkData.batch_change_entity_parts(nodes, add_parts, stk::mesh::PartVector{});
 
     for(stk::mesh::Entity node : nodes) {
         EXPECT_TRUE(bulkData.bucket(node).member(part));
     }
 
     stk::mesh::PartVector remove_parts(1, &part);
-    bulkData.batch_change_entity_parts(nodes, {}, remove_parts);
+    bulkData.batch_change_entity_parts(nodes, stk::mesh::PartVector{}, remove_parts);
 
     for(stk::mesh::Entity node : nodes) {
         EXPECT_FALSE(bulkData.bucket(node).member(part));
@@ -166,7 +166,7 @@ TEST(UnitTestChangeParts, test_superset_and_subset_part_change)
 
     bulkData.modification_begin();
     stk::mesh::PartVector add_parts(1, &subsetPart1);
-    bulkData.change_entity_parts(node1, add_parts, {});
+    bulkData.change_entity_parts(node1, add_parts, stk::mesh::PartVector{});
     bulkData.modification_end();
 
     EXPECT_TRUE(bulkData.bucket(node1).member(supersetPart));
@@ -175,7 +175,7 @@ TEST(UnitTestChangeParts, test_superset_and_subset_part_change)
 
     bulkData.modification_begin();
     add_parts[0] = &supersetPart;
-    bulkData.change_entity_parts(node2, add_parts, {});
+    bulkData.change_entity_parts(node2, add_parts, stk::mesh::PartVector{});
     bulkData.modification_end();
 
     EXPECT_TRUE(bulkData.bucket(node2).member(supersetPart));
@@ -192,7 +192,7 @@ TEST(UnitTestChangeParts, test_superset_and_subset_part_change)
 
     bulkData.modification_begin();
     add_parts[0] = &subsetPart2;
-    bulkData.change_entity_parts(node2, add_parts, {});
+    bulkData.change_entity_parts(node2, add_parts, stk::mesh::PartVector{});
     bulkData.modification_end();
 
     EXPECT_TRUE(bulkData.bucket(node2).member(supersetPart));

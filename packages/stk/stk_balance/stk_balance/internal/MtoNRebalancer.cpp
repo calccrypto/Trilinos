@@ -54,7 +54,7 @@ void MtoNRebalancer::change_parts_on_entities_on_all_subdomains(const std::vecto
     {
         if(subdomain_proc_mapping[i] == static_cast<unsigned>(mBulkData.parallel_rank()))
         {
-            std::vector<stk::mesh::Entity> entities = get_entities_for_subdomain(i);
+            stk::mesh::EntityVector entities = get_entities_for_subdomain(i);
             subdomainCreator.move_entities_into_subdomain_part(i, entities);
         }
     }
@@ -65,7 +65,7 @@ stk::mesh::BulkData& MtoNRebalancer::get_bulk()
     return mBulkData;
 }
 
-std::vector<stk::mesh::Entity> MtoNRebalancer::get_entities_for_subdomain(size_t subdomain_num)
+stk::mesh::EntityVector MtoNRebalancer::get_entities_for_subdomain(size_t subdomain_num)
 {
     const stk::mesh::BucketVector &buckets = get_bulk().buckets(stk::topology::ELEMENT_RANK);
     return get_entitites_for_subdomain_using_field_from_buckets(subdomain_num, buckets);
@@ -73,7 +73,7 @@ std::vector<stk::mesh::Entity> MtoNRebalancer::get_entities_for_subdomain(size_t
 
 stk::mesh::EntityVector MtoNRebalancer::get_entitites_for_subdomain_using_field_from_buckets(size_t subdomain_num, const stk::mesh::BucketVector& buckets)
 {
-    std::vector<stk::mesh::Entity> entities;
+    stk::mesh::EntityVector entities;
     for(size_t j = 0; j < buckets.size(); j++)
         add_owned_entities_from_bucket_using_target_decomp_field(*buckets[j], subdomain_num, entities);
     return entities;

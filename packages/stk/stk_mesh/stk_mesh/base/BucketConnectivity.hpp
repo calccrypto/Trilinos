@@ -113,7 +113,7 @@ class BucketConnectivity<TargetRank, FIXED_CONNECTIVITY>
   static const EntityRank target_rank = TargetRank;
   static const ConnectivityType connectivity_type = FIXED_CONNECTIVITY;
 
-  typedef std::vector<Entity> EntityVector;
+  typedef stk::mesh::EntityVector EntityVector;
   typedef std::vector<ConnectivityOrdinal> ConnectivityOrdinalVector;
   typedef std::vector<Permutation> PermutationVector;
 
@@ -460,7 +460,7 @@ public:
   static const EntityRank target_rank = TargetRank;
   static const ConnectivityType connectivity_type = DYNAMIC_CONNECTIVITY;
 
-  typedef std::vector<Entity>              EntityVector;
+  typedef stk::mesh::EntityVector          EntityVector;
   typedef std::vector<ConnectivityOrdinal> ConnectivityOrdinalVector;
   typedef std::vector<Permutation>         PermutationVector;
   typedef std::vector<uint32_t>            UInt32Vector;

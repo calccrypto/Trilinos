@@ -169,7 +169,7 @@ void populate_AA_sideset(stk::mesh::BulkData& bulk,
     EXPECT_TRUE(block_1 != nullptr);
 
     meta.set_part_id(*block_1, 1);
-    std::vector<const stk::mesh::Part*> touchingParts { block_1 };
+    stk::mesh::ConstPartVector touchingParts { block_1 };
     meta.set_surface_to_block_mapping(parts[0], touchingParts);
 }
 
@@ -238,7 +238,7 @@ void populate_AB_sideset(stk::mesh::BulkData& bulk,
     meta.set_part_id(*block_1, 1);
     meta.set_part_id(*block_2, 2);
 
-    std::vector<const stk::mesh::Part*> touchingParts;
+    stk::mesh::ConstPartVector touchingParts;
 
     if(direction == LEFT)
     {
@@ -355,4 +355,3 @@ stk::mesh::Part* create_AB_mesh_with_sideset_and_distribution_factors(stk::mesh:
 
 }
 }
-

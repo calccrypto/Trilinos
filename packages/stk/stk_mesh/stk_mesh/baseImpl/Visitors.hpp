@@ -406,13 +406,13 @@ struct OnlyRecvGhosts {
 };
 
 struct VecPushBack {
-  VecPushBack(std::vector<Entity>& rcvGhosts, std::vector<bool>& status)
+  VecPushBack(EntityVector& rcvGhosts, std::vector<bool>& status)
   : recvGhosts(rcvGhosts), ghostStatus(status) {}
   void operator()(Entity entity) {
     recvGhosts.push_back(entity);
     ghostStatus[entity.local_offset()] = true;
   }
-  std::vector<Entity>& recvGhosts;
+  EntityVector& recvGhosts;
   std::vector<bool>& ghostStatus;
 };
 

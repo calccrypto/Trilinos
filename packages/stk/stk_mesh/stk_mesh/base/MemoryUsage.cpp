@@ -90,7 +90,7 @@ void compute_memory_usage(const BulkData& bulk, MemoryUsage& mem_usage)
   mem_usage.bucket_counts.resize(nranks, 0);
   mem_usage.bucket_bytes.resize(nranks, 0);
 
-  std::vector<Entity> entities;
+  EntityVector entities;
   for(size_t i=0; i<nranks; ++i) {
     EntityRank rank_i = static_cast<EntityRank>(i);
     total_bytes += mem_usage.entity_counts[rank_i]*sizeof(Entity);

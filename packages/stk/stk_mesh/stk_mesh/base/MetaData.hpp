@@ -524,7 +524,7 @@ public:
 
   void set_mesh_on_fields(BulkData* bulk);
 
-  void set_surface_to_block_mapping(const stk::mesh::Part* surface, const std::vector<const stk::mesh::Part*> &blocks)
+  void set_surface_to_block_mapping(const stk::mesh::Part* surface, const stk::mesh::ConstPartVector &blocks)
   {
       std::vector<unsigned> partOrdinals(blocks.size());
       for(size_t i=0;i<blocks.size();++i)
@@ -532,9 +532,9 @@ public:
       m_surfaceToBlock[surface->mesh_meta_data_ordinal()] = partOrdinals;
   }
 
-  std::vector<const stk::mesh::Part*> get_blocks_touching_surface(const stk::mesh::Part* surface) const
+  stk::mesh::ConstPartVector get_blocks_touching_surface(const stk::mesh::Part* surface) const
   {
-      std::vector<const stk::mesh::Part*> blockParts;
+      stk::mesh::ConstPartVector blockParts;
       const auto entry = m_surfaceToBlock.find(surface->mesh_meta_data_ordinal());
       if(entry != m_surfaceToBlock.end())
       {
@@ -547,9 +547,9 @@ public:
       return blockParts;
   }
 
-  std::vector<const stk::mesh::Part *> get_surfaces_in_surface_to_block_map() const
+  stk::mesh::ConstPartVector get_surfaces_in_surface_to_block_map() const
   {
-      std::vector<const stk::mesh::Part *> surfaces;
+      stk::mesh::ConstPartVector surfaces;
       surfaces.reserve(m_surfaceToBlock.size());
       SurfaceBlockMap::const_iterator iter = m_surfaceToBlock.begin();
       for(; iter != m_surfaceToBlock.end();++iter)

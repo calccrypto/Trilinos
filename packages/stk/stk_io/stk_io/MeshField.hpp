@@ -156,7 +156,7 @@ namespace stk {
     private:
       MeshField();
 
-      std::vector<const stk::mesh::Part*> m_subsetParts;
+      stk::mesh::ConstPartVector m_subsetParts;
       std::vector<MeshFieldPart> m_fieldParts;
       
       stk::mesh::FieldBase *m_field;

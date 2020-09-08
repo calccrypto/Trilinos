@@ -424,11 +424,11 @@ private:
   // bucket[to_ordinal] = entity;
   // whatever was there before is lost
   //  With optional fields argument only copy listed fields
-  void overwrite_entity(size_type to_ordinal, Entity entity, const std::vector<FieldBase*>* fields=NULL);
+  void overwrite_entity(size_type to_ordinal, Entity entity, const FieldVector* fields=NULL);
 
   void initialize_slot(size_type ordinal, Entity entity);
   //  Optional fields argument, only copy listed fields
-  void reset_entity_location(Entity entity, size_type to_ordinal, const std::vector<FieldBase*>* fields = NULL);
+  void reset_entity_location(Entity entity, size_type to_ordinal, const FieldVector* fields = NULL);
 
   size_type get_others_begin_index(size_type bucket_ordinal, EntityRank rank) const;
   size_type get_others_end_index(size_type bucket_ordinal, EntityRank rank) const;
@@ -468,7 +468,7 @@ private:
   PartVector             m_parts;
 
   // Entity data
-  std::vector<Entity>    m_entities;    // Array of entity handles; will be removed soon
+  EntityVector           m_entities;    // Array of entity handles; will be removed soon
 
   impl::Partition    *m_partition;
 

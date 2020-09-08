@@ -102,7 +102,7 @@ TEST_F(MeshWithTwoBlocks, getNodesetPartsAndNames)
     for(size_t k = 0 ; k < ns_names_expected.size(); ++k)
     EXPECT_EQ(ns_names[k], ns_names_expected[k] );
 
-    std::vector<stk::mesh::Part*> parts;
+    stk::mesh::PartVector parts;
     stk::tools::GetPartsByName( parts,get_bulk(),ns_names);
     ASSERT_EQ(static_cast<size_t>(2), (parts.size()) );
     stk::mesh::Part &ns1 = *get_meta().get_part("nodelist_1");
@@ -132,7 +132,7 @@ TEST_F(MeshWithTwoBlocks, getBlockPartsAndNames)
     for(size_t k = 0 ; k < blk_names_expected.size(); ++k)
     EXPECT_EQ(blk_names[k], blk_names_expected[k] );
 
-    std::vector<stk::mesh::Part*> parts;
+    stk::mesh::PartVector parts;
     stk::tools::GetPartsByName( parts,get_bulk(),blk_names);
     ASSERT_EQ(static_cast<size_t>(2), (parts.size()) );
     stk::mesh::Part &blk1 = *get_meta().get_part("block_1");

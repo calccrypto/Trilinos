@@ -168,7 +168,7 @@ public:
 
     int write_defined_output_fields(const stk::mesh::BulkData& bulk_data, const stk::mesh::FieldState *state = nullptr);
     int write_defined_output_fields_for_selected_subset(const stk::mesh::BulkData& bulk_data,
-                                                        std::vector<stk::mesh::Part*>& selectOutputElementParts,
+                                                        stk::mesh::PartVector& selectOutputElementParts,
                                                         const stk::mesh::FieldState *state = nullptr);
 
     int process_output_request(double time, const stk::mesh::BulkData& bulk_data, const std::vector<std::vector<int>> &attributeOrdering);
@@ -204,7 +204,7 @@ public:
 
     Ioss::DatabaseIO *get_output_database();
 
-    std::vector<stk::mesh::Entity> get_output_entities(const stk::mesh::BulkData& bulk_data, const std::string &name);
+    stk::mesh::EntityVector get_output_entities(const stk::mesh::BulkData& bulk_data, const std::string &name);
 
 private:
     void define_output_fields(const stk::mesh::BulkData& bulk_data, const std::vector<std::vector<int>> &attributeOrdering);

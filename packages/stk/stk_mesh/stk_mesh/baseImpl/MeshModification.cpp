@@ -112,7 +112,7 @@ bool MeshModification::internal_modification_end(modification_optimization opt)
         m_bulkData.m_modSummary.write_summary(synchronized_count());
         if(!m_bulkData.add_fmwk_data())
         {
-            std::vector<Entity> shared_modified;
+            EntityVector shared_modified;
             m_bulkData.internal_update_sharing_comm_map_and_fill_list_modified_shared_entities(shared_modified);
         }
     }
@@ -142,7 +142,7 @@ bool MeshModification::internal_resolve_node_sharing(modification_optimization o
         m_bulkData.m_modSummary.write_summary(synchronized_count());
         if(!m_bulkData.add_fmwk_data())
         {
-            std::vector<Entity> shared_modified;
+            EntityVector shared_modified;
             m_bulkData.internal_update_sharing_comm_map_and_fill_list_modified_shared_entities(shared_modified);
         }
     }
@@ -183,7 +183,7 @@ bool MeshModification::internal_modification_end_after_node_sharing_resolution(m
         m_bulkData.m_modSummary.write_summary(synchronized_count());
         if(!m_bulkData.add_fmwk_data())
         {
-            std::vector<Entity> shared_modified;
+            EntityVector shared_modified;
             m_bulkData.internal_update_sharing_comm_map_and_fill_list_modified_shared_entities(shared_modified);
         }
     }

@@ -63,7 +63,7 @@ void count_entities( const Selector & selector ,
 
 /** \brief Get all entities of the specified type, sorted by ID.  */
 void get_entities( const BulkData & mesh , EntityRank entity_rank,
-                   std::vector< Entity> & entities);
+                   EntityVector & entities);
 
 /** \brief  Count entities in selected buckets (selected by the
  *          given selector instance), and sorted by ID.
@@ -76,7 +76,7 @@ unsigned count_selected_entities( const Selector & selector ,
  */
 void get_selected_entities( const Selector & selector ,
                             const BucketVector & input_buckets ,
-                            std::vector< Entity> & entities ,
+                            EntityVector & entities ,
                             bool sortByGlobalId = true );
 
 unsigned get_num_entities(const stk::mesh::BulkData &bulk);

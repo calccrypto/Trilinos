@@ -59,13 +59,13 @@ struct EntityGhostData;
 //stk-mesh capabilities.
 //----------------------------------------------------------------------
 
-void find_entities_these_nodes_have_in_common(const BulkData& mesh, stk::mesh::EntityRank rank, unsigned numNodes, const Entity* nodes, std::vector<Entity>& entity_vector);
+void find_entities_these_nodes_have_in_common(const BulkData& mesh, stk::mesh::EntityRank rank, unsigned numNodes, const Entity* nodes, EntityVector& entity_vector);
 
-void find_entities_with_larger_ids_these_nodes_have_in_common_and_locally_owned(stk::mesh::EntityId id, const BulkData& mesh, stk::mesh::EntityRank rank, unsigned numNodes, const Entity* nodes, std::vector<Entity>& entity_vector);
+void find_entities_with_larger_ids_these_nodes_have_in_common_and_locally_owned(stk::mesh::EntityId id, const BulkData& mesh, stk::mesh::EntityRank rank, unsigned numNodes, const Entity* nodes, EntityVector& entity_vector);
 
 bool do_these_nodes_have_any_shell_elements_in_common(BulkData& mesh, unsigned numNodes, const Entity* nodes);
 
-void find_locally_owned_elements_these_nodes_have_in_common(const BulkData& mesh, unsigned numNodes, const Entity* nodes, std::vector<Entity>& elems);
+void find_locally_owned_elements_these_nodes_have_in_common(const BulkData& mesh, unsigned numNodes, const Entity* nodes, EntityVector& elems);
 
 bool find_element_edge_ordinal_and_equivalent_nodes(BulkData& mesh, Entity element, unsigned numEdgeNodes, const Entity* edgeNodes, unsigned& elemEdgeOrdinal, Entity* elemEdgeNodes);
 
@@ -165,9 +165,9 @@ enum ShellStatus {
 
 void create_shell_status(const std::vector<stk::topology> & elements_touching_surface, stk::topology original_element_topology, std::vector<ShellStatus> & element_shell_status);
 
-template<typename ENTITY_ID>
-bool should_face_be_connected_to_element_side(std::vector<ENTITY_ID> & face_nodes,
-                                              std::vector<ENTITY_ID> & element_side_nodes,
+template<typename ENTITY_VECTOR>
+bool should_face_be_connected_to_element_side(ENTITY_VECTOR & face_nodes,
+                                              ENTITY_VECTOR & element_side_nodes,
                                               stk::topology element_side_topology,
                                               ShellStatus  shell_status)
 {
@@ -197,7 +197,7 @@ bool should_face_be_connected_to_element_side(std::vector<ENTITY_ID> & face_node
 
 void send_entity_keys_to_owners(
   BulkData & mesh ,
-  const std::vector<Entity> & recvGhosts ,
+  const EntityVector & recvGhosts ,
         std::set< EntityProc , EntityLess > & sendGhosts);
 
 void comm_sync_send_recv(
@@ -208,7 +208,7 @@ void comm_sync_send_recv(
 void comm_sync_send_recv(
   BulkData & mesh ,
   std::set< EntityProc , EntityLess > & new_send ,
-  std::vector<Entity> & new_recv,
+  EntityVector & new_recv,
   std::vector<bool>& ghostStatus );
 
 void comm_sync_aura_send_recv(
@@ -256,7 +256,7 @@ void filter_out(OrdinalVector& vec,
 
 void merge_in(OrdinalVector& vec, const OrdinalVector& parts);
 
-stk::mesh::ConnectivityOrdinal get_ordinal_from_side_entity(const std::vector<stk::mesh::Entity> &sides,
+stk::mesh::ConnectivityOrdinal get_ordinal_from_side_entity(const EntityVector &sides,
                                                             stk::mesh::ConnectivityOrdinal const * ordinals,
                                                             stk::mesh::Entity side);
 stk::mesh::ConnectivityOrdinal get_ordinal_for_element_side_pair(const stk::mesh::BulkData &bulkData,
@@ -294,4 +294,3 @@ void connect_edge_to_elements(stk::mesh::BulkData& bulk, stk::mesh::Entity edge)
 //----------------------------------------------------------------------
 
 #endif // stk_mesh_base_impl_MeshImplUtils_hpp
-

@@ -99,8 +99,8 @@ void fill_element_and_side_ids_from_sideset(const stk::mesh::SideSet& sset,
 
 inline void fill_side_elements_and_nodes(const stk::mesh::BulkData &bulk_data,
                                          stk::mesh::Entity side,
-                                         std::vector<stk::mesh::Entity> &side_elements,
-                                         std::vector<stk::mesh::Entity> &side_nodes)
+                                         stk::mesh::EntityVector &side_elements,
+                                         stk::mesh::EntityVector &side_nodes)
 {
     side_nodes.assign(bulk_data.begin_nodes(side), bulk_data.end_nodes(side));
 
@@ -144,8 +144,8 @@ void fill_element_and_side_ids_from_connectivity(stk::io::OutputParams &params,
     for(size_t i = 0; i < num_sides; ++i)
     {
         stk::mesh::Entity side = allSides[i];
-        std::vector<stk::mesh::Entity> side_elements;
-        std::vector<stk::mesh::Entity> side_nodes;
+        stk::mesh::EntityVector side_elements;
+        stk::mesh::EntityVector side_nodes;
 
         fill_side_elements_and_nodes(bulk_data, side, side_elements, side_nodes);
 

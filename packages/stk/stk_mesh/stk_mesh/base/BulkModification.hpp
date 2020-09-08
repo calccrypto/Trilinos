@@ -35,7 +35,7 @@
 #ifndef STK_MESH_BASE_BULK_MODIFICATION_HPP
 #define STK_MESH_BASE_BULK_MODIFICATION_HPP
 
-#include <vector>                       // for vector
+#include <Types.hpp>                       // for EntityVector
 namespace stk { namespace mesh { class BulkData; } }
 namespace stk { namespace mesh { struct Entity; } }
 
@@ -53,8 +53,8 @@ namespace mesh {
    *     ghosted entities.
    */
 void find_closure( const BulkData & bulk,
-    const std::vector< Entity> & entities,
-    std::vector< Entity> & entities_closure);
+    const stk::mesh::EntityVector & entities,
+    stk::mesh::EntityVector & entities_closure);
 
 } // namespace mesh
 } // namespace stk

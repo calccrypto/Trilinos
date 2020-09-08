@@ -57,7 +57,7 @@ public :
   typedef stk::mesh::Entity                  Entity;
   typedef stk::mesh::EntityKey               EntityKey;
   typedef stk::mesh::EntityVector            EntityVector;
-  typedef std::vector<stk::mesh::FieldBase*> FieldVector;
+  typedef stk::mesh::FieldVector             FieldVector;
   typedef std::vector<EntityKey>             EntityKeyVector;
 
   TransferCopyByIdStkMeshAdapter(

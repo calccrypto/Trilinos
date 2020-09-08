@@ -86,7 +86,7 @@ stk::mesh::Entity get_side(const stk::mesh::BulkData& bulk, const stk::mesh::Sid
 }
 
 std::pair<bool,bool> is_side_internal_and_modified(const stk::mesh::BulkData& bulk, stk::mesh::Entity side,
-                        const std::vector<const stk::mesh::Part*> &blocks, const stk::mesh::Selector& activeSelector)
+                        const stk::mesh::ConstPartVector &blocks, const stk::mesh::Selector& activeSelector)
 {
     bool isModified = !(bulk.state(side) == stk::mesh::Unchanged);
     bool isInternal = false;
@@ -125,7 +125,7 @@ std::pair<bool,bool> is_sideset_internal_and_modified(const stk::mesh::BulkData&
     std::pair<bool,bool> isInternalAndModified(false,false);
     if (is_part_a_sideset(bulk, surfacePart))
     {
-        std::vector<const stk::mesh::Part*> blocks = bulk.mesh_meta_data().get_blocks_touching_surface(&surfacePart);
+        stk::mesh::ConstPartVector blocks = bulk.mesh_meta_data().get_blocks_touching_surface(&surfacePart);
 
         stk::mesh::EntityVector sides;
         stk::mesh::get_selected_entities(surfacePart, bulk.buckets(bulk.mesh_meta_data().side_rank()), sides);
@@ -152,7 +152,7 @@ void issue_internal_sideset_warning(const std::string& sidesetName, std::ostream
 void SidesetUpdater::update_sidesets_without_surface_block_mapping(stk::mesh::BulkData &bulk)
 {
   stk::mesh::MetaData& meta = bulk.mesh_meta_data();
-  std::vector<const stk::mesh::Part *> surfacesInMap = meta.get_surfaces_in_surface_to_block_map();
+  stk::mesh::ConstPartVector surfacesInMap = meta.get_surfaces_in_surface_to_block_map();
   std::set<const stk::mesh::Part*> alreadyUpdatedSidesetParts;
   std::set<const stk::mesh::Part*> difference;
 
@@ -187,7 +187,7 @@ void SidesetUpdater::reconstruct_noninternal_sidesets(const std::vector<size_t> 
     bool reconstructed = false;
     if(bulkData.was_mesh_modified_since_sideset_creation())
     {
-        std::vector<const stk::mesh::Part *> surfacesInMap = bulkData.mesh_meta_data().get_surfaces_in_surface_to_block_map();
+        stk::mesh::ConstPartVector surfacesInMap = bulkData.mesh_meta_data().get_surfaces_in_surface_to_block_map();
         std::set<const stk::mesh::Part*, part_compare_by_ordinal> parents;
         ThrowRequireMsg(reducedValues.size() == surfacesInMap.size(), "ReducedValues wrong size!");
 
@@ -223,7 +223,7 @@ void SidesetUpdater::reconstruct_noninternal_sidesets(const std::vector<size_t> 
             bool isInternal = value_is_from_internal_sideset(reducedValues[i]);
             if (!isInternal)
             {
-                std::vector<const stk::mesh::Part *> touching_parts = bulkData.mesh_meta_data().get_blocks_touching_surface(surfacePart);
+                stk::mesh::ConstPartVector touching_parts = bulkData.mesh_meta_data().get_blocks_touching_surface(surfacePart);
 
                 stk::mesh::Selector elementSelector = stk::mesh::selectUnion(touching_parts);
                 if(touching_parts.size() == 0) {
@@ -260,7 +260,7 @@ void SidesetUpdater::reconstruct_sidesets()
     }
 
     for(auto part : subsets) {
-        std::vector<const stk::mesh::Part *> touching_parts = bulkData.mesh_meta_data().get_blocks_touching_surface(part);
+        stk::mesh::ConstPartVector touching_parts = bulkData.mesh_meta_data().get_blocks_touching_surface(part);
 
         stk::mesh::Selector elementSelector = stk::mesh::selectUnion(touching_parts);
         fill_sideset(*part, bulkData, elementSelector);
@@ -282,7 +282,7 @@ void SidesetUpdater::fill_values_to_reduce(std::vector<size_t> &valuesToReduce)
     valuesToReduce.clear();
     if(bulkData.was_mesh_modified_since_sideset_creation())
     {
-        std::vector<const stk::mesh::Part *> surfacesInMap = bulkData.mesh_meta_data().get_surfaces_in_surface_to_block_map();
+        stk::mesh::ConstPartVector surfacesInMap = bulkData.mesh_meta_data().get_surfaces_in_surface_to_block_map();
         std::set<const stk::mesh::Part*, part_compare_by_ordinal> parents;
 
         valuesToReduce.assign(surfacesInMap.size(), 0);

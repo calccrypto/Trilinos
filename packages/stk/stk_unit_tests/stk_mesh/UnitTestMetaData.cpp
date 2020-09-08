@@ -165,9 +165,9 @@ TEST( UnitTestMetaData, testEntityRepository )
   meta.commit();
 
   stk::unit_test_util::BulkDataTester bulk ( meta , MPI_COMM_WORLD );
-  std::vector<stk::mesh::Part *>  add_part;
+  stk::mesh::PartVector  add_part;
   add_part.push_back ( &part );
-  std::vector<stk::mesh::Part *> elem_parts;
+  stk::mesh::PartVector elem_parts;
   elem_parts.push_back( &part );
   elem_parts.push_back( &hex_part );
 
@@ -713,8 +713,3 @@ TEST(UnitTestMetaData, InconsistentParallelDebugCheck_BadNumberOfFields_RootTooM
 
 }
 //----------------------------------------------------------------------
-
-
-
-
-

@@ -149,7 +149,7 @@ public:
         return this->generate_new_entity(preferred_offset);
     }
 
-    void my_resolve_ownership_of_modified_entities(const std::vector<stk::mesh::Entity> &shared_new)
+    void my_resolve_ownership_of_modified_entities(const stk::mesh::EntityVector &shared_new)
     {
         this->resolve_ownership_of_modified_entities(shared_new);
     }
@@ -252,22 +252,22 @@ public:
         this->update_comm_list_based_on_changes_in_comm_map();
     }
 
-    void my_internal_update_distributed_index(std::vector<stk::mesh::Entity> & shared_new )
+    void my_internal_update_distributed_index(stk::mesh::EntityVector & shared_new )
     {
         this->internal_update_sharing_comm_map_and_fill_list_modified_shared_entities( shared_new );
     }
 
-    void my_internal_update_distributed_index(stk::mesh::EntityRank entityRank, std::vector<stk::mesh::Entity> & shared_new )
+    void my_internal_update_distributed_index(stk::mesh::EntityRank entityRank, stk::mesh::EntityVector & shared_new )
     {
         this->internal_update_sharing_comm_map_and_fill_list_modified_shared_entities_of_rank(entityRank, shared_new);
     }
 
-    void my_move_entities_to_proper_part_ownership( std::vector<stk::mesh::Entity> &shared_modified )
+    void my_move_entities_to_proper_part_ownership( stk::mesh::EntityVector &shared_modified )
     {
         this->move_entities_to_proper_part_ownership( shared_modified );
     }
 
-    void my_add_comm_list_entries_for_entities( std::vector<stk::mesh::Entity> &shared_modified )
+    void my_add_comm_list_entries_for_entities( stk::mesh::EntityVector &shared_modified )
     {
         this->add_comm_list_entries_for_entities( shared_modified );
     }

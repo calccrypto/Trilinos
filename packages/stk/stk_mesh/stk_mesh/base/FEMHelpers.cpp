@@ -476,7 +476,7 @@ int get_entity_subcell_id(const BulkData& mesh,
         const Entity entity,
         const EntityRank subcell_rank,
         stk::topology subcell_topology,
-        const std::vector<Entity>& subcell_nodes)
+        const EntityVector& subcell_nodes)
 {
     ThrowAssert(subcell_rank <= stk::topology::ELEMENT_RANK);
     const int INVALID_SIDE = -1;

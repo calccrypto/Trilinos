@@ -48,7 +48,7 @@ namespace mesh {
 //----------------------------------------------------------------------
 
 void get_entities( const BulkData & mesh , EntityRank entity_rank ,
-                   std::vector< Entity> & entities )
+                   EntityVector & entities )
 {
   const BucketVector & ks = mesh.buckets( entity_rank );
   entities.clear();
@@ -95,7 +95,7 @@ unsigned count_selected_entities(
 
 void get_selected_entities( const Selector & selector ,
                             const BucketVector & input_buckets ,
-                            std::vector< Entity> & entities ,
+                            EntityVector & entities ,
                             bool sortByGlobalId )
 {
   size_t count = count_selected_entities(selector,input_buckets);

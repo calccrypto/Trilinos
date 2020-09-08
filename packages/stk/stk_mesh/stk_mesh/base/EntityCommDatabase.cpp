@@ -282,7 +282,7 @@ void pack_field_values(const BulkData& mesh, CommBuffer & buf , Entity entity )
     }
     const Bucket   & bucket = mesh.bucket(entity);
     const MetaData & mesh_meta_data = mesh.mesh_meta_data();
-    const std::vector< FieldBase * > & fields = mesh_meta_data.get_fields(bucket.entity_rank());
+    const FieldVector & fields = mesh_meta_data.get_fields(bucket.entity_rank());
     for ( FieldBase* field : fields ) {
         if ( field->data_traits().is_pod ) {
             const unsigned size = field_bytes_per_entity( *field, bucket );
@@ -306,7 +306,7 @@ bool unpack_field_values(const BulkData& mesh,
     }
     const Bucket   & bucket = mesh.bucket(entity);
     const MetaData & mesh_meta_data = mesh.mesh_meta_data();
-    const std::vector< FieldBase * > & fields = mesh_meta_data.get_fields(bucket.entity_rank());
+    const FieldVector & fields = mesh_meta_data.get_fields(bucket.entity_rank());
     bool ok = true ;
     for ( const FieldBase* f : fields) {
         if ( f->data_traits().is_pod ) {
