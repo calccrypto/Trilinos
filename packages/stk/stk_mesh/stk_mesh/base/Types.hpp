@@ -50,6 +50,9 @@
 #include <set>
 #include <map>
 
+#ifdef STK_HAVE_SICM
+#include <sicm.hpp>
+#endif
 
 namespace stk { namespace mesh { class Bucket; } }
 namespace stk { namespace mesh { class Part; } }
@@ -75,13 +78,23 @@ class FieldBase;
 /** \brief  Collections of \ref stk::mesh::Part "parts" are frequently
  *          maintained as a vector of Part pointers.
  */
+#ifdef STK_HAVE_SICM
+typedef std::vector< Part *,       SICMAllocator< Part *> >       PartVector;
+typedef std::vector< Bucket *,     SICMAllocator< Bucket *> >     BucketVector;
+typedef std::vector< const Part *, SICMAllocator< const Part *> > ConstPartVector;
+typedef std::vector< FieldBase *,  SICMAllocator< FieldBase *> >  FieldVector;
+typedef std::vector< unsigned,     SICMAllocator< unsigned> >     OrdinalVector;
+typedef std::vector< unsigned,     SICMAllocator< unsigned> >     PermutationIndexVector;
+typedef std::vector< Entity,       SICMAllocator< Entity> >       EntityVector;
+#else
 typedef std::vector< Part * >       PartVector;
 typedef std::vector< Bucket * >     BucketVector;
 typedef std::vector< const Part * > ConstPartVector;
 typedef std::vector< FieldBase * >  FieldVector;
 typedef std::vector< unsigned >     OrdinalVector;
 typedef std::vector< unsigned >     PermutationIndexVector;
-typedef std::vector<Entity>         EntityVector;
+typedef std::vector< Entity >       EntityVector;
+#endif
 
 
 template< typename Scalar = void ,

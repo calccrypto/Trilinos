@@ -47,6 +47,9 @@
 #include <stk_search/BoundingBox.hpp>
 #include <stk_search/IdentProc.hpp>
 
+#ifdef STK_HAVE_SICM
+#include <sicm.hpp>
+#endif
 
 namespace stk {
 namespace transfer {
@@ -58,7 +61,11 @@ public :
   typedef stk::mesh::EntityKey               EntityKey;
   typedef stk::mesh::EntityVector            EntityVector;
   typedef stk::mesh::FieldVector             FieldVector;
-  typedef std::vector<EntityKey>             EntityKeyVector;
+  typedef std::vector<EntityKey
+                      #ifdef STK_HAVE_SICM
+                      , SICMAllocator<EntityKey>
+                      #endif
+                      >             EntityKeyVector;
 
   TransferCopyByIdStkMeshAdapter(
       stk::mesh::BulkData &   mesh,
@@ -199,7 +206,7 @@ public :
   }
 
   DataTypeKey::data_t get_field_type(const unsigned fieldIndex) const
-  { 
+  {
     ThrowRequireMsg(fieldIndex < m_transfer_fields.size(),
                     "P" << m_mesh.parallel_rank() <<
                     " stk::transfer::StkMeshAdapter Error, attempt to access invalid field index [" << fieldIndex <<
@@ -209,7 +216,7 @@ public :
 
     DataTypeKey::data_t dataType( DataTypeKey::data_t::INVALID_TYPE );
 
- 
+
     if(field->type_is<unsigned>()) {
       dataType = DataTypeKey::data_t::UNSIGNED_INTEGER;
     }
@@ -232,7 +239,7 @@ public :
     }
     return dataType;
   }
-   
+
 
 private:
   stk::mesh::BulkData & m_mesh;
